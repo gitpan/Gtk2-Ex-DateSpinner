@@ -1,0 +1,40 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.55.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 8624bcdae55baeef00cd11d5dfcfa60f68710a02 COPYING
+SHA1 c135a56a9a848f3f1aaf40620ca609bb171e5f00 MANIFEST
+SHA1 2294fa24825c467119eeac1efc453b994725ab3d META.yml
+SHA1 5999ecbf977cfcc68e9b1ef50595d456a742f325 Makefile.PL
+SHA1 eaec73f0a0d1a19bef9882ad7c1634049019031b README
+SHA1 4439c5c473dacab44d6d9b171136fad7cacf9204 debian/changelog
+SHA1 1b6453892473a467d07372d45eb05abc2031647a debian/compat
+SHA1 bf03c9e64408ffc5776c36f37bd89050a47bab70 debian/control
+SHA1 894ae55ec13dcf3c4beb55415a609681ec14ba44 debian/copyright
+SHA1 de6d54e18861079bcfef3df0397188f717b7aea9 debian/rules
+SHA1 f2848f15f6b37c04c0acab46c02bd67441b53897 debian/watch
+SHA1 6d719629d4c83a5303cc0a7d39649d574b5ee9b3 devel/screenshot.pl
+SHA1 7cad66bba68f546712fdc6c26d782c5c27701783 examples/builder.pl
+SHA1 3f47cf641cbeabca54d01fbf0b687d73ee5c2d29 examples/simple.pl
+SHA1 9b45212d4790adf74230ae53a981d24df76b9263 lib/Gtk2/Ex/DateSpinner.pm
+SHA1 786b3f6a6114fcfae7d38a9284931d30070610e2 t/DateSpinner.t
+SHA1 a661a39e55a4127aecb1b97a631c4f01f7dce8c6 t/pod.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (GNU/Linux)
+
+iD8DBQFI0Fj1LFMCIV9q3ToRAqhCAKC0EArVNg+5n70yY7MtuVMTuCs2/wCffk08
+IpVOJ1vkeXy96bPzSXCpMJc=
+=G+Df
+-----END PGP SIGNATURE-----

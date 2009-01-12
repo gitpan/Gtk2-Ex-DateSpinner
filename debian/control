@@ -15,6 +15,11 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
+
+# "libtest-pod-perl (>= 1.00)" and "libtest-weaken-perl" could be in
+# Build-Depends for more tests, but they're optional and just make the
+# build tools drag in more stuff.
+
 Source: libgtk2-ex-datespinner-perl
 Section: perl
 Priority: optional
@@ -26,7 +31,7 @@ Bugs: mailto:user42@zip.com.au
 
 Package: libgtk2-ex-datespinner-perl
 Architecture: all
-Depends: libgtk2-perl, libdate-calc-perl (>= 5.0)
+Depends: perl (>= 5.8), libgtk2-perl, libdate-calc-perl (>= 5.0), ${misc:Depends}
 Description: Date entry widget for Gtk2-Perl using spin buttons
  Gtk2::Ex::DateSpinner is a simple date entry widget using spin
  buttons for year, month and day.

@@ -18,22 +18,19 @@
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# Usage: ./simple.pl
-#
-# Simple datespinner display.
-
-
 use strict;
 use warnings;
-use Gtk2 '-init';
-use Gtk2::Ex::DateSpinner;
+use Gtk2::Ex::DateSpinner::PopupForEntry;
+use Test::More tests => 3;
 
-my $toplevel = Gtk2::Window->new('toplevel');
-$toplevel->signal_connect (destroy => sub { Gtk2->main_quit; });
 
-my $datespinner = Gtk2::Ex::DateSpinner->new;
-$toplevel->add ($datespinner);
+my $want_version = 2;
+ok ($Gtk2::Ex::DateSpinner::PopupForEntry::VERSION >= $want_version,
+    'VERSION variable');
+ok (Gtk2::Ex::DateSpinner::PopupForEntry->VERSION >= $want_version,
+    'VERSION class method');
+Gtk2::Ex::DateSpinner::PopupForEntry->VERSION ($want_version);
+ok (! eval { Gtk2::Ex::DateSpinner::PopupForEntry->VERSION ($want_version + 1000) },
+   'VERSION demand beyond current');
 
-$toplevel->show_all;
-Gtk2->main;
 exit 0;

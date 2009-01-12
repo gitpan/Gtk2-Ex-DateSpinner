@@ -1,4 +1,4 @@
-# Copyright 2008 Kevin Ryde
+# Copyright 2008, 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -19,12 +19,9 @@ package Gtk2::Ex::DateSpinner;
 use strict;
 use warnings;
 use Date::Calc;
-use Encode;
 use Gtk2;
-use I18N::Langinfo;
-use POSIX ();
 
-our $VERSION = 1;
+our $VERSION = 2;
 
 use constant DEBUG => 0;
 
@@ -112,9 +109,17 @@ sub _update {
   $month_spin->set_value ($month);
   $day_spin->set_value ($day);
 
-  # prefer strftime over Date::Calc's localized names, expect strftime to
-  # know more languages, and setlocale() is done automatically when perl
-  # starts
+  # Prefer strftime over Date::Calc's localized names, on the basis that
+  # strftime will probably know more languages, and setlocale() is done
+  # automatically when perl starts.
+  #
+  # The modules end up required for the initial value when a DateSpinner is
+  # created, but deferring them until that time might let you load the
+  # module without yet dragging in the other big stuff.
+  #
+  require POSIX;
+  require I18N::Langinfo;
+  require Encode;
   my $wday = Date::Calc::Day_of_Week ($year, $month, $day); # 1=Mon,7=Sun,...
   my $str = POSIX::strftime (' %a ', 0,0,0, 1,1,100, $wday%7);# 0=Sun,1=Mon,..
   my $charset = I18N::Langinfo::langinfo (I18N::Langinfo::CODESET());
@@ -232,7 +237,7 @@ L<http://www.geocities.com/user42_kevin/gtk2-ex-datespinner/index.html>
 
 =head1 LICENSE
 
-Gtk2-Ex-DateSpinner is Copyright 2007, 2008 Kevin Ryde
+Gtk2-Ex-DateSpinner is Copyright 2008, 2009 Kevin Ryde
 
 Gtk2-Ex-DateSpinner is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

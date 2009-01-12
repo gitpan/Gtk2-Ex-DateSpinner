@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2007, 2008 Kevin Ryde
+# Copyright 2007, 2008, 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -17,12 +17,13 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
+use 5.008;
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile
-  (NAME         => 'Gtk2::Ex::DateSpinner',
+  (NAME         => 'Gtk2-Ex-DateSpinner',
    ABSTRACT     => 'Date entry widget using spin buttons.',
    VERSION_FROM => 'lib/Gtk2/Ex/DateSpinner.pm',
    AUTHOR       => 'Kevin Ryde <user42@zip.com.au>',
@@ -30,33 +31,36 @@ WriteMakefile
    SIGN         => 1,
 
    PREREQ_PM    => {
-                    # 5.0 for new style Add_Delta_YMD() probably
-                    # otherwise at least 4.1 for bug fix in Add_Delta_YMD()
+                    # 5.0 for new style Add_Delta_YMD() probably,
+                    # otherwise at least 4.1 for bug fix in Add_Delta_YMD(),
                     # otherwise at least 4.0 for Today() func
                     'Date::Calc' => '5.0',
 
                     # any version should be ok
                     'Gtk2' => 0,
-
-                    # actually Gtk2-Perl requires perl 5.8, which has Encode
-                    # and I18N::Langinfo builtin already
-                    'Encode' => 0,
-                    'I18N::Langinfo' => 0,
                    },
    clean        => { FILES => "DateSpinner.html" },
 
    EXTRA_META => <<'HERE',
+recommends:
+    Test::Pod: 1.00
+    Test::Weaken: 0
 no_index:
     directory:
         - devel
 resources:
     homepage: http://www.geocities.com/user42_kevin/gtk2-ex-datespinner/index.html
+    license: http://www.gnu.org/licenses/#GPL
 HERE
   );
 
 
+package MY;
+use strict;
+use warnings;
 
-sub MY::postamble {
+sub postamble {
+  print "MY::postamble extras ...\n";
   return <<'MAKE_FRAG';
 
 DateSpinner.html: lib/Gtk2/Ex/DateSpinner.pm Makefile
@@ -70,12 +74,32 @@ myman:
 	touch SIGNATURE
 	(make manifest 2>&1; diff -u MANIFEST.old MANIFEST) |less
 
-CHECKFILES = $(TO_INST_PM) t/*.t examples/*.pl devel/*.pl
+LINT_FILES = $(TO_INST_PM) t/*.t examples/*.pl devel/*.pl
 lint:
-	for i in $(CHECKFILES); do perl -MO=Lint $$i; done
-	podchecker $(CHECKFILES)
+	for i in $(LINT_FILES); do perl -MO=Lint $$i; done
+	podchecker $(LINT_FILES)
 pc:
-	perlcritic $(CHECKFILES)
+	perlcritic $(LINT_FILES)
+unused:
+	for i in $(LINT_FILES); do perl -Mwarnings::unused -I lib $$i; done
+
+mydist:
+	make dist COMPRESS='gzip --force --best'
+	make copyright-years-check
+	rm -rf mydist.tmp
+	mkdir mydist.tmp
+	(cd mydist.tmp; \
+	 tar xfz ../$(DISTVNAME).tar.gz; \
+	 cd $(DISTVNAME); \
+	perl -e '!eval{require YAML} || YAML::LoadFile("META.yml")' \
+	 && echo YAML reads ok; \
+	perl -e '!eval{require YAML::Tiny} || YAML::Tiny->read("META.yml")' \
+	 && echo YAML::Tiny reads ok; \
+	cpansign -v; \
+	perl Makefile.PL SIGN=0; \
+	make debug-constants-check; \
+	)
+	rm -rf mydist.tmp
 
 # find files in the dist with mod times this year, but without this year in
 # the copyright line
@@ -88,7 +112,7 @@ copyright-years-check:
 	  while read i; do \
 	    case $$i in \
 	      '' | */ \
-	      | debian/changelog | debian/compat | debian/control \
+	      | debian/changelog | debian/compat \
 	      | t/pod.t \
 	      | COPYING | MANIFEST* | SIGNATURE | META.yml) \
 	      continue ;; \

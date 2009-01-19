@@ -18,9 +18,10 @@
 package Gtk2::Ex::DateSpinner::EntryWithCancel;
 use strict;
 use warnings;
-use Gtk2;
+# version 1.180 for perl subclass to override GInterfaces from superclass
+use Gtk2 1.180;
 
-our $VERSION = 2;
+our $VERSION = 3;
 
 use constant DEBUG => 0;
 
@@ -51,17 +52,23 @@ use Glib::Object::Subclass
 # DateSpinner::CellRenderer to give its created entry a widget name and
 # establish bindings that way?
 #
-Gtk2::Rc->parse_string (<<'HERE');
+sub INIT_INSTANCE {
+
+  # once only RC additions, done at first instance creation
+
+  # priority level "gtk" treating this as widget level default, for
+  # overriding by application or user RC
+  Gtk2::Rc->parse_string (<<'HERE');
 binding "Gtk2__Ex__DateSpinner__EntryWithCancel_keys" {
   bind "Escape" { "cancel" () }
   bind "Up"     { "activate" () }
   bind "Down"   { "activate" () }
 }
-# priority level "gtk" treating this as widget level default, for overriding
-# by application or user RC
 class "Gtk2__Ex__DateSpinner__EntryWithCancel"
   binding:gtk "Gtk2__Ex__DateSpinner__EntryWithCancel_keys"
 HERE
+  { no warnings; *INIT_INSTANCE = \&Glib::FALSE; }
+}
 
 # if (DEBUG) {
 #   *SET_PROPERTY = sub {
@@ -157,7 +164,7 @@ And implements the interface
 =head1 DESCRIPTION
 
 B<Caution: This is internals of C<Gtk2::Ex::DateSpinner::CellRenderer>.  If
-ends up with a use beyond that then it'll be split out and renamed.>
+it ends up with a use beyond that then it'll be split out and renamed.>
 
 C<EntryWithCancel> extends C<Gtk2::Entry> to have an "editing-cancelled"
 flag set when editing through the C<Gtk2::CellEditable> interface.  Ending
@@ -204,9 +211,9 @@ then consult the value.
 
 =item C<cancel> (action, no parameters)
 
-Perform the cancel action, which is to set C<editing-cancelled> property,
-and if editing is active from a C<start_editing> then emit C<editing-done>
-and C<remove-widget>.
+Perform the cancel action, which is to set the C<editing-cancelled>
+property, and if editing is active from a C<start_editing> then emit
+C<editing-done> and C<remove-widget>.
 
 The C<Escape> key binding runs this signal.
 

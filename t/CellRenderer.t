@@ -24,7 +24,7 @@ use Gtk2::Ex::DateSpinner::CellRenderer;
 use Test::More tests => 10;
 
 
-my $want_version = 2;
+my $want_version = 3;
 ok ($Gtk2::Ex::DateSpinner::CellRenderer::VERSION >= $want_version,
     'VERSION variable');
 ok (Gtk2::Ex::DateSpinner::CellRenderer->VERSION  >= $want_version,
@@ -62,9 +62,8 @@ sub main_iterations {
   print "main_iterations(): ran $count events/iterations\n";
 }
 
-my $have_display = Gtk2->init_check;
 my $have_test_weaken = eval { require Test::Weaken };
-if (! $have_test_weaken) { diag "No Test::Weaken, $@"; }
+if (! $have_test_weaken) { diag "No Test::Weaken -- $@"; }
 
 
 #-----------------------------------------------------------------------------
@@ -72,7 +71,7 @@ if (! $have_test_weaken) { diag "No Test::Weaken, $@"; }
 
 {
   my $renderer = Gtk2::Ex::DateSpinner::CellRenderer->new;
-  ok ($renderer->VERSION  >= $want_version, 'VERSION object method');
+  ok ($renderer->VERSION >= $want_version, 'VERSION object method');
   $renderer->VERSION ($want_version);
 
   require Scalar::Util;
@@ -94,6 +93,8 @@ SKIP: {
 
 #-----------------------------------------------------------------------------
 # start_editing return object
+
+my $have_display = Gtk2->init_check;
 
 SKIP: {
   $have_display or skip 'no DISPLAY available', 2;
@@ -119,8 +120,8 @@ SKIP: {
 }
 
 SKIP: {
-  $have_display or skip 'no DISPLAY available', 2;
-  $have_test_weaken or skip 'Test::Weaken not available', 2;
+  ($have_display && $have_test_weaken)
+    or skip 'no DISPLAY and/or no Test::Weaken available', 2;
 
   my $toplevel = Gtk2::Window->new ('toplevel');
   my $renderer = Gtk2::Ex::DateSpinner::CellRenderer->new (editable => 1);

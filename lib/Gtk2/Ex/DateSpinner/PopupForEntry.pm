@@ -21,7 +21,7 @@ use warnings;
 use Gtk2;
 use List::Util qw(min max);
 
-our $VERSION = 2;
+our $VERSION = 3;
 
 use constant DEBUG => 0;
 

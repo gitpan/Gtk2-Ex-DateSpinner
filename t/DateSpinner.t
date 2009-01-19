@@ -24,7 +24,7 @@ use Gtk2::Ex::DateSpinner;
 use Test::More tests => 6;
 
 
-my $want_version = 2;
+my $want_version = 3;
 ok ($Gtk2::Ex::DateSpinner::VERSION >= $want_version, 'VERSION variable');
 ok (Gtk2::Ex::DateSpinner->VERSION  >= $want_version, 'VERSION class method');
 Gtk2::Ex::DateSpinner->VERSION ($want_version);
@@ -63,9 +63,11 @@ diag ("Running on       Gtk version ",
   is ($datespinner, undef, 'should be garbage collected when weakened');
 }
 
+my $have_test_weaken = eval { require Test::Weaken };
+if (! $have_test_weaken) { diag "No Test::Weaken -- $@"; }
+
 SKIP: {
-  eval { require Test::Weaken }
-    or skip 1, "Test::Weaken not available: $@";
+  $have_test_weaken or skip "Test::Weaken not available: $@", 1;
 
   my @weaken = Test::Weaken::poof(sub {
                                     [ Gtk2::Ex::DateSpinner->new ]

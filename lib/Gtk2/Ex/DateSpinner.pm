@@ -21,7 +21,7 @@ use warnings;
 use Date::Calc;
 use Gtk2;
 
-our $VERSION = 2;
+our $VERSION = 3;
 
 use constant DEBUG => 0;
 
@@ -228,8 +228,8 @@ garbage.
 
 =head1 SEE ALSO
 
-L<Gtk2::SpinButton>, L<Date::Calc>, L<Gtk2::Calendar>,
-L<Gtk2::Ex::CalendarButton>, L<Gtk2::Ex::DateRange>
+L<Gtk2::Ex::DateSpinner::CellRenderer>, L<Date::Calc>, L<Gtk2::Calendar>,
+L<Gtk2::SpinButton>, L<Gtk2::Ex::CalendarButton>, L<Gtk2::Ex::DateRange>
 
 =head1 HOME PAGE
 

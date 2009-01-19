@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 2;
+our $VERSION = 3;
 
 use constant DEBUG => 0;
 
@@ -194,7 +194,8 @@ until the first edit.  They're only meant for internal use as yet.
 L<Gtk2::Ex::DateSpinner>, L<Gtk2::CellRendererText>
 
 Gtk2-Perl F<examples/cellrenderer_date.pl> does a similar thing popping up a
-C<Gtk2::Calendar>.
+C<Gtk2::Calendar>.  See C<Gtk2::Ex::Datasheet::DBI> for a version of it in
+use.
 
 =head1 HOME PAGE
 

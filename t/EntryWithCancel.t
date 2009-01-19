@@ -21,10 +21,10 @@
 use strict;
 use warnings;
 use Gtk2::Ex::DateSpinner::EntryWithCancel;
-use Test::More tests => 15;
+use Test::More tests => 17;
 
 
-my $want_version = 2;
+my $want_version = 3;
 ok ($Gtk2::Ex::DateSpinner::EntryWithCancel::VERSION >= $want_version,
     'VERSION variable');
 ok (Gtk2::Ex::DateSpinner::EntryWithCancel->VERSION >= $want_version,
@@ -32,6 +32,16 @@ ok (Gtk2::Ex::DateSpinner::EntryWithCancel->VERSION >= $want_version,
 Gtk2::Ex::DateSpinner::EntryWithCancel->VERSION ($want_version);
 ok (! eval { Gtk2::Ex::DateSpinner::EntryWithCancel->VERSION ($want_version + 1000) },
     'VERSION demand beyond current');
+
+{
+  # check the once-only rc bits are ok
+  ok (Gtk2::Ex::DateSpinner::EntryWithCancel->new,
+      'create 1');
+
+  my $init = \&Gtk2::Ex::DateSpinner::EntryWithCancel::INIT_INSTANCE;
+  is ($init, \&Glib::FALSE,
+      'INIT_INSTANCE once-only rc bits');
+}
 
 {
   my $entry = Gtk2::Ex::DateSpinner::EntryWithCancel->new;

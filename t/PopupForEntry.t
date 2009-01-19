@@ -24,7 +24,7 @@ use Gtk2::Ex::DateSpinner::PopupForEntry;
 use Test::More tests => 3;
 
 
-my $want_version = 2;
+my $want_version = 3;
 ok ($Gtk2::Ex::DateSpinner::PopupForEntry::VERSION >= $want_version,
     'VERSION variable');
 ok (Gtk2::Ex::DateSpinner::PopupForEntry->VERSION >= $want_version,

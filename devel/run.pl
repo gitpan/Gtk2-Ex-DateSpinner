@@ -23,13 +23,24 @@ use warnings;
 use Gtk2 '-init';
 use Gtk2::Ex::DateSpinner;
 
+use FindBin;
+my $progname = $FindBin::Script;
+
 my $toplevel = Gtk2::Window->new('toplevel');
-$toplevel->signal_connect (destroy => sub { Gtk2->main_quit; });
+$toplevel->signal_connect (destroy => sub {
+                             print "$progname: quit\n";
+                             Gtk2->main_quit; });
 
 my $vbox = Gtk2::VBox->new;
 $toplevel->add ($vbox);
 
 my $datespinner = Gtk2::Ex::DateSpinner->new;
+$datespinner->signal_connect ('notify::value' => sub {
+                                my ($obj, $pspec) = @_;
+                                my $pname = $pspec->get_name;
+                                my $value = $obj->get($pname);
+                                print "$progname: notify:value now $value\n";
+                              });
 $vbox->pack_start ($datespinner, 0,0,0);
 
 my $hbox = Gtk2::HBox->new;

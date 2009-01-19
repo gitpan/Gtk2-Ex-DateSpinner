@@ -15,37 +15,37 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 8624bcdae55baeef00cd11d5dfcfa60f68710a02 COPYING
-SHA1 1923830a7b36f9fb3a3f08d5a4a4111916b28409 Changes
+SHA1 7dbc1fe5797e2ab66bedeabf5af3becfa56c2b05 Changes
 SHA1 b2eca953c32ffaaf1762681e3616eac9bd813927 MANIFEST
-SHA1 dc13a23b9d6076c3c765477a84a9b94ada921d4a META.yml
-SHA1 955246749cbd3afaeeaa78025bd82fe636c0e5bb Makefile.PL
-SHA1 eaec73f0a0d1a19bef9882ad7c1634049019031b README
-SHA1 a5414016eaa3a90837d41b8dde83647e746867be debian/changelog
+SHA1 3b02a185f44fcbd628c08a60b21d3278766607c0 META.yml
+SHA1 6b8abf37bdda842be9ae5dcb0ea3daa120a6563a Makefile.PL
+SHA1 3fdd354c554918bd9bf3e64494fab0be41ad75f9 README
+SHA1 d3ad8c6be32d7f4de427c93910b29da45b78ab82 debian/changelog
 SHA1 1b6453892473a467d07372d45eb05abc2031647a debian/compat
-SHA1 796857799aab58c7b52040bd2bb34493fc085e0d debian/control
+SHA1 21a32831db333978572809b523b715346060bec0 debian/control
 SHA1 894ae55ec13dcf3c4beb55415a609681ec14ba44 debian/copyright
 SHA1 de6d54e18861079bcfef3df0397188f717b7aea9 debian/rules
 SHA1 e71e56c528c2310d9df9db80896a2849d3c6c97c debian/watch
-SHA1 f92dfe0a217004f1ae633218ad5bb09a8aeb04ce devel/cell.pl
-SHA1 785cff820f5320fd55f78b51b00a7183523b9523 devel/entry-with-cancel.pl
-SHA1 632d789ada792a2e194ec98872f2229605065f4f devel/run.pl
+SHA1 625591dae10b380bdf8ae1313a58c35b8a42faf1 devel/cell.pl
+SHA1 a121fd9dbed0844ee5ec97c9e7400f2c61e8bab0 devel/entry-with-cancel.pl
+SHA1 9f3a58bb77f6c1d24e1d04ff120cc6f7864a1cf1 devel/run.pl
 SHA1 6d719629d4c83a5303cc0a7d39649d574b5ee9b3 devel/screenshot.pl
 SHA1 2bd18e269593df3c5f746855cb03474f65244fa6 examples/builder.pl
 SHA1 ddfbc0828be0eb86dd1f4c1d16cd45b32751c138 examples/cellrenderer.pl
 SHA1 123dab7272e244b4da382e65f93186581d0e7028 examples/simple.pl
-SHA1 661c0357f54e20a5ffce3b3e363d34ed50a2e568 lib/Gtk2/Ex/DateSpinner.pm
-SHA1 675a078c065d264d824f4c4d4ea54a48a7e483a9 lib/Gtk2/Ex/DateSpinner/CellRenderer.pm
-SHA1 d10cd3b64b98da778533ffae33c3798bfcfdb98f lib/Gtk2/Ex/DateSpinner/EntryWithCancel.pm
-SHA1 27f8a69947c94f7bddfd2147786d8d97c263c717 lib/Gtk2/Ex/DateSpinner/PopupForEntry.pm
-SHA1 70db216be87662ba2de2a3ab136ceb8683378bc7 t/CellRenderer.t
-SHA1 49b31e4e52cf6549bd76298fc3744b7e16dc2b4e t/DateSpinner.t
-SHA1 d08590e529954a67755be066bdc447f5f230575f t/EntryWithCancel.t
-SHA1 a2a1a155cd13b8acd9edab2468a760240e7144b8 t/PopupForEntry.t
+SHA1 c205bb61ad66713013c70c51eaae4b524968458e lib/Gtk2/Ex/DateSpinner.pm
+SHA1 22ea30797bfd1f65d6190cb1590bf31ab64cd3d3 lib/Gtk2/Ex/DateSpinner/CellRenderer.pm
+SHA1 38be5d6bdd406ba3e7c4791567e7de36e4b1ab45 lib/Gtk2/Ex/DateSpinner/EntryWithCancel.pm
+SHA1 dce0995d94f83fc5ce673d8d6e9122ef550b9714 lib/Gtk2/Ex/DateSpinner/PopupForEntry.pm
+SHA1 b02fdd411c79aba92de3f1d0e607f34a31438c52 t/CellRenderer.t
+SHA1 bfd12e3668cf243ee786f610da7c78bbf07d4273 t/DateSpinner.t
+SHA1 d258a4d4d974c0fcb443d6c3654e8a0119d83850 t/EntryWithCancel.t
+SHA1 aa8a320f86d8ce5e65fa7e74256eb4e918333763 t/PopupForEntry.t
 SHA1 a661a39e55a4127aecb1b97a631c4f01f7dce8c6 t/pod.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.9 (GNU/Linux)
 
-iD8DBQFJaoKqLFMCIV9q3ToRApxqAJ0XTsDV1D3cQ058sJVpLiU+3LAN7gCgqKt5
-0FdD810jEFYH9iDBBNahTlI=
-=uUco
+iD8DBQFJdOlCLFMCIV9q3ToRAskqAKCagiaz4xDNj94s9e44aR/95fhkPwCfZvz5
+GnuAOH7zDpAG+1+L0x6NX+M=
+=YrJH
 -----END PGP SIGNATURE-----

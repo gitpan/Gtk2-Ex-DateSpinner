@@ -111,47 +111,6 @@ Gtk2->main;
 exit 0;
 
 
-=over 4
-
-=item C<< Gtk2::Ex::CellRendererTextBits::renderer_edited_set_value ($renderer, $view_or_model, $col_num) >>
-
-Setup C<$renderer> so that when edited the new value is stored back to
-column C<$col_num> using a C<set_value> in the style of ListStore or
-TreeStore.
-
-The underlying model doesn't have to be a ListStore or TreeStore, anything
-implementing C<set_value> is fine.  C<$view_or_model> can then be any of
-
-=over 4
-
-=item *
-
-A C<Gtk2::CellView> or similar with a C<get_model> method to give the model
-to store to.  When packing the renderer in such a viewer the easiest thing
-is to pass that viewer here.
-
-=item *
-
-A C<Gtk2::TreeViewColumn> or similar with a C<get_tree_view> method to give
-the view and in turn the model.  When packing a renderer in a TreeViewColumn
-the easiest thing is to pass that same column here.
-
-=item *
-
-A C<Gtk2::TreeModel> with a C<set_value> method, for direct use.  It might
-sometimes make sense to write to a different model than the one being
-viewed, but the paths (TreePath coordinates) must be the same.
-
-=back
-
-Usually C<$col_num> to write back to will be the same column being displayed
-by the renderer, as set by <add_attribute>.  Unfortunately this can't be
-automatically extracted from the renderer/viewer setup so must be supplied.
-
-=back
-
-=cut
-
 sub renderer_edited_set_value {
   my ($renderer, $dest, $col_num) = @_;
   (defined $col_num) || croak 'No column number supplied';

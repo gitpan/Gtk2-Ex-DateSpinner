@@ -17,6 +17,9 @@ with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 3,  January 2009
+    - fixes for dependencies and some test skips
+
 Version 2,  January 2009
     - new Gtk2::Ex::DateSpinner::CellRenderer with popup datespinner
 

@@ -36,8 +36,12 @@ WriteMakefile
                     # otherwise at least 4.0 for Today() func
                     'Date::Calc' => '5.0',
 
-                    # any version should be ok
-                    'Gtk2' => 0,
+                    # version 1.180 for EntryWithCancel to override
+                    # superclass GInterface
+                    'Gtk2' => '1.180',
+
+                    'Glib::Ex::SignalIds' => 0,
+                    'Gtk2::Ex::WidgetBits' => 0,
                    },
    clean        => { FILES => "DateSpinner.html" },
 

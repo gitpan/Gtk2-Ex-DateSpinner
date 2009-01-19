@@ -17,11 +17,13 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
-
 use strict;
 use warnings;
 use Gtk2 '-init';
 use Gtk2::Ex::DateSpinner::EntryWithCancel;
+
+use FindBin;
+my $progname = $FindBin::Script;
 
 # Gtk2::Rc->parse_string (<<HERE);
 # binding "my_keys" {
@@ -30,8 +32,22 @@ use Gtk2::Ex::DateSpinner::EntryWithCancel;
 # class "GtkEntry" binding "my_keys"
 # HERE
 
-use FindBin;
-my $progname = $FindBin::Script;
+if (Gtk2::BindingSet->can('find')) {
+  my $bindingset = Gtk2::BindingSet->find
+    ('Gtk2__Ex__DateSpinner__EntryWithCancel_keys');
+  print "$progname: find bindingset gives ",($bindingset||'false'),"\n";
+}
+
+my $entry = Gtk2::Ex::DateSpinner::EntryWithCancel->new;
+
+if (Gtk2::BindingSet->can('find')) {
+  my $bindingset = Gtk2::BindingSet->find
+    ('Gtk2__Ex__DateSpinner__EntryWithCancel_keys');
+  print "$progname: find bindingset gives ",($bindingset||'false'),"\n";
+  if ($bindingset) {
+    print "  name ",$bindingset->name,"\n";
+  }
+}
 
 my $toplevel = Gtk2::Window->new('toplevel');
 $toplevel->signal_connect (destroy => sub { Gtk2->main_quit; });
@@ -39,15 +55,15 @@ $toplevel->signal_connect (destroy => sub { Gtk2->main_quit; });
 my $vbox = Gtk2::VBox->new;
 $toplevel->add ($vbox);
 
-my $entry = Gtk2::Ex::DateSpinner::EntryWithCancel->new;
-print $entry->get_name,"\n";
+print "$progname: entry name ",$entry->get_name,"\n";
 $vbox->pack_start ($entry, 0,0,0);
 $entry->signal_connect (cancel => sub { print "$progname: cancel\n"; });
 $entry->signal_connect (activate => sub { print "$progname: activate\n"; });
 $entry->signal_connect
   (key_press_event => sub {
      my ($entry, $event) = @_;
-     print $event->hardware_keycode, " ", $event->group, "\n";
+     print "$progname: keycode ", $event->hardware_keycode,
+       " group ", $event->group, "\n";
      return 0; # Gtk2::EVENT_PROPAGATE
    });
 

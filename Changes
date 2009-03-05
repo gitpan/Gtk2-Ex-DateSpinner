@@ -17,6 +17,9 @@ with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 4,  February 2009
+    - avoid some stupid adjustment page size warnings from Gtk 2.14
+
 Version 3,  January 2009
     - fixes for dependencies and some test skips
 

@@ -46,9 +46,13 @@ WriteMakefile
    clean        => { FILES => "DateSpinner.html" },
 
    EXTRA_META => <<'HERE',
-recommends:
-    Test::Pod: 1.00
-    Test::Weaken: 0
+optional_features:
+    maximum_tests:
+        description: Have "make test" do as much as possible.
+        requires:
+            Test::Pod: 1.00
+            Test::Weaken: 1.000
+            Gtk2: 0
 no_index:
     directory:
         - devel
@@ -81,8 +85,8 @@ myman:
 LINT_FILES = $(TO_INST_PM) t/*.t examples/*.pl devel/*.pl
 lint:
 	for i in $(LINT_FILES); do perl -MO=Lint $$i; done
-	podchecker $(LINT_FILES)
 pc:
+	-podchecker $(LINT_FILES)
 	perlcritic $(LINT_FILES)
 unused:
 	for i in $(LINT_FILES); do perl -Mwarnings::unused -I lib $$i; done
@@ -110,7 +114,7 @@ mydist:
 copyright-years-check:
 	year=`date +%Y`; \
 	tar tvfz $(DISTVNAME).tar.gz \
-	| grep $$year- \
+	| egrep '$$year-|debian/copyright' \
 	| sed 's:^.*$(DISTVNAME)/::' \
 	| (result=0; \
 	  while read i; do \

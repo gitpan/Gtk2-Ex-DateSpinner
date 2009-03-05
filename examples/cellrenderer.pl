@@ -26,7 +26,7 @@
 # As usual the model/view/renderer stuff is diabolically complicated, but
 # assuming you've managed to display stuff, the editing is then a matter of
 # enabling 'editable' in the renderer and hooking onto its 'edited' signal.
-# Writing the new data back to the model or to disk or wherever is the
+# Writing the new data back to the model, or to disk or wherever, is the
 # responsibility of that handler.
 #
 # The code here is basically the same as you'd do for a plain
@@ -34,16 +34,16 @@
 # DateSpinner popup.  The $newstr string passed to the 'edited' signal is
 # the new ISO YYYY-MM-DD date.
 #
-# You can generate the 'editable' setting on the renderer by all the usual
-# model+viewer tricks, like getting it from a column or setting it with a
-# data func according to the phase of the moon.  That way you can have some
-# cells editable and some not.
+# You can set the 'editable' on the renderer by all the usual model+viewer
+# tricks, like getting it from a column or setting it with a data func
+# according to the phase of the moon.  That way you can have some cells
+# editable and some not.
 #
 # The text column added here is just for decoration, but you could make it
 # editable too.  You can even have multiple renderers in the one column,
 # each editable.  The choice between one column with two renderers and two
 # columns with a renderer each is only really a matter of how you want stuff
-# to line up and column headings, resizing, reordering etc.
+# to line up, and column headings, resizing, reordering etc.
 #
 
 use 5.008;

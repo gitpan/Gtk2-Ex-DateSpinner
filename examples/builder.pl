@@ -21,10 +21,10 @@
 # Usage: ./builder.pl
 #
 # This is an example of making a datespinner in a GUI with Gtk2::Builder
-# (new in Gtk 2.12).  The class name is "Gtk2__Ex__DateSpinner", as usual
-# for Gtk2-Perl package name to Gtk type name conversion.  There's nothing
-# builder-specific in DateSpinner, it's all inherited from the usual builder
-# widget handling.
+# (which is new in Gtk 2.12).  The class name is "Gtk2__Ex__DateSpinner", as
+# usual for Gtk2-Perl package name to Gtk type name conversion.  There's
+# nothing builder-specific in DateSpinner, it's all inherited from the usual
+# builder widget handling.
 
 use strict;
 use warnings;

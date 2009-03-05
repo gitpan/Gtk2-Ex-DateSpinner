@@ -21,7 +21,7 @@ use warnings;
 # version 1.180 for perl subclass to override GInterfaces from superclass
 use Gtk2 1.180;
 
-our $VERSION = 3;
+our $VERSION = 4;
 
 use constant DEBUG => 0;
 
@@ -167,8 +167,8 @@ B<Caution: This is internals of C<Gtk2::Ex::DateSpinner::CellRenderer>.  If
 it ends up with a use beyond that then it'll be split out and renamed.>
 
 C<EntryWithCancel> extends C<Gtk2::Entry> to have an "editing-cancelled"
-flag set when editing through the C<Gtk2::CellEditable> interface.  Ending
-by an Escape key press or C<cancel> action sets the flag.
+flag set when editing through the C<Gtk2::CellEditable> interface.  An an
+Escape key press or C<cancel> action sets the flag.
 
 C<Gtk2::Entry> already has such a flag (mis-spelt C<editing_canceled>) but
 doesn't make it publicly available.  Is that right?  At any rate this
@@ -183,12 +183,13 @@ subclass gets the desired effect.
 Create and return a new EntryWithCancel object.  Optional key/value pairs
 set initial properties as per C<< Glib::Object->new >>.  Eg.
 
-    my $entry = Gtk2::Ex::DateSpinner::EntryWithCancel->new (xalign => 0.5);
+    my $entry = Gtk2::Ex::DateSpinner::EntryWithCancel->new
+                  (xalign => 0.5);
 
 =item C<< $entry->cancel () >>
 
-Emit the C<cancel> action signal (see L</SIGNALS> below), thus performing
-that action.
+Emit the C<cancel> action signal, thus performing that action (see
+L</SIGNALS> below).
 
 =back
 
@@ -199,9 +200,9 @@ that action.
 =item C<editing-cancelled> (boolean, default false)
 
 Cleared by C<start_editing> (the C<Gtk2::CellEditable> func) and then set to
-true or false under an Escape (keypress) or C<activate> (C<Gtk2::Widget>
-signal).  C<editing-done> handlers (the C<Gtk2::CellEditable> signal) can
-then consult the value.
+true or false under an Escape (keypress), C<cancel> (below), or C<activate>
+(C<Gtk2::Widget> signal).  C<editing-done> handlers (the
+C<Gtk2::CellEditable> signal) can then consult the value.
 
 =back
 
@@ -212,7 +213,7 @@ then consult the value.
 =item C<cancel> (action, no parameters)
 
 Perform the cancel action, which is to set the C<editing-cancelled>
-property, and if editing is active from a C<start_editing> then emit
+property, and if editing is active (from a C<start_editing>) then emit
 C<editing-done> and C<remove-widget>.
 
 The C<Escape> key binding runs this signal.
@@ -242,7 +243,7 @@ or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
 more details.
 
 You should have received a copy of the GNU General Public License along with
-Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
+Gtk2-Ex-DateSpinner.  If not, see L<http://www.gnu.org/licenses/>.
 
 =cut
 

@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 3;
+our $VERSION = 4;
 
 use constant DEBUG => 0;
 
@@ -132,30 +132,38 @@ C<Gtk2::CellRendererText>.
 
 =head1 DESCRIPTION
 
-C<DateSpinner::CellRenderer> is a cell renderer for use in a viewer widget
-like C<Gtk2::TreeView>.  It displaying an ISO format YYYY-MM-DD date as a
-text field.  Editing the field presents a popup C<Gtk2::Ex::DateSpinner> and
-a C<Gtk2::Entry>.
+C<DateSpinner::CellRenderer> displays an ISO format YYYY-MM-DD date as a
+text field.  Editing the field presents both a C<Gtk2::Entry> and a popup
+C<Gtk2::Ex::DateSpinner>.
+
+    +------------+
+    | 2008-06-14 |
+    +------------+
+    +-----------------------------------------------------+
+    | +------+   +----+   +----+         +----+ +------+  |
+    | | 2008 |^  |  6 |^  | 14 |^  Sat   | Ok | |Cancel|  |
+    | +------+v  +----+v  +----+v        +----+ +------+  |
+    +-----------------------------------------------------+
 
 The popup allows mouse clicks or arrow keys to increment or decrement the
 date components.  This is good if you often just want to bump a date up or
-down a bit, and if you're displaying YYYY-MM-DD it makes sense to present it
-like that for editing.  Of course there's a huge range of other ways you
-could display or edit a date, this is merely one.
+down a bit.  And when you're displaying YYYY-MM-DD it makes sense to present
+it like that for editing.  Of course there's a huge range of other ways you
+can display or edit a date, this is merely one.
 
 =head2 Details
 
-The date to edit is taken from the renderer C<text> property and must be in
-YYYY-MM-DD format.  The new edited value is passed to the C<edited> signal
-emitted on the renderer in the usual way (see L<Gtk2::CellRenderer>).  Text
-renderer properties affect the display.  C<xalign> is copied to the Entry
-widget to have it left, right or centred while editing the same as displayed
-(like CellRendererText does).
+The date to display, and edit, is taken from the renderer C<text> property
+and must be in YYYY-MM-DD format.  A new edited value is passed to the
+C<edited> signal emitted on the renderer in the usual way (see
+L<Gtk2::CellRenderer>).  Text renderer properties affect the display.
+C<xalign> is copied to the Entry widget to have it left, right or centred
+while editing the same as displayed (like CellRendererText does).
 
 Pressing Return in the fields accepts the values.  Pressing Escape cancels
 the edit.  Likewise the Ok and Cancel button widgets.  The stock
-accelerators activate the buttons too, eg. Alt-O and Alt-C in an English
-locale, though Return and Escape are much easier to remember.
+accelerators activate the buttons too, Alt-O and Alt-C in an English locale,
+though Return and Escape are much easier to remember.
 
 Note you must set the C<editable> property (per the base
 C<Gtk2::CellRendererText>) to make the DateSpinner::CellRenderer editable,
@@ -172,19 +180,20 @@ editable and others not.
 Create and return a new DateSpinner::CellRenderer object.  Optional key/value
 pairs set initial properties as per C<< Glib::Object->new >>.  Eg.
 
-    my $renderer = Gtk2::Ex::DateSpinner::CellRenderer->new;
+    my $renderer = Gtk2::Ex::DateSpinner::CellRenderer->new
+                     (editable => 1);
 
 =back
 
 =head1 OTHER NOTES
 
-Like the plain CellRendererText, DateSpinner::CellRenderer creates a new
+As with the plain CellRendererText, DateSpinner::CellRenderer creates a new
 editable widget for every edit, including a new popup window every time.
-Both are destroyed when accepted or cancelled.  That's a bit wasteful, but
-it's usually fast enough for casual editing and it might save some memory in
-between.
+Both are destroyed when accepted or cancelled.  That's a little wasteful,
+but it's usually fast enough for casual editing and it might save some
+memory in between.
 
-The code for the popup and entry are in the
+The code for the popup and entry is in the
 C<Gtk2::Ex::DateSpinner::PopupForEntry> and
 C<Gtk2::Ex::DateSpinner::EntryWithCancel> components.  They're not loaded
 until the first edit.  They're only meant for internal use as yet.
@@ -193,8 +202,9 @@ until the first edit.  They're only meant for internal use as yet.
 
 L<Gtk2::Ex::DateSpinner>, L<Gtk2::CellRendererText>
 
-Gtk2-Perl F<examples/cellrenderer_date.pl> does a similar thing popping up a
-C<Gtk2::Calendar>.  See C<Gtk2::Ex::Datasheet::DBI> for a version of it in
+Gtk2-Perl F<examples/cellrenderer_date.pl> does a similar display/edit
+popping up a C<Gtk2::Calendar>.  See
+L<Gtk2::Ex::Datasheet::DBI|Gtk2::Ex::Datasheet::DBI> for a version of it in
 use.
 
 =head1 HOME PAGE
@@ -216,6 +226,6 @@ or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
 more details.
 
 You should have received a copy of the GNU General Public License along with
-Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
+Gtk2-Ex-DateSpinner.  If not, see L<http://www.gnu.org/licenses/>.
 
 =cut

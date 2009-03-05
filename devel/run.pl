@@ -28,8 +28,9 @@ my $progname = $FindBin::Script;
 
 my $toplevel = Gtk2::Window->new('toplevel');
 $toplevel->signal_connect (destroy => sub {
-                             print "$progname: quit\n";
-                             Gtk2->main_quit; });
+                             print "$progname: destroy\n";
+                             Gtk2->main_quit;
+                           });
 
 my $vbox = Gtk2::VBox->new;
 $toplevel->add ($vbox);
@@ -43,10 +44,18 @@ $datespinner->signal_connect ('notify::value' => sub {
                               });
 $vbox->pack_start ($datespinner, 0,0,0);
 
+my $entry = Gtk2::Entry->new;
+$vbox->pack_start ($entry, 1, 1, 0);
+$entry->signal_connect (activate => sub {
+                          my $str = $entry->get_text;
+                          print "$progname: set datespinner value '$str'\n";
+                          $datespinner->set (value => $str);
+                        });
+
 my $hbox = Gtk2::HBox->new;
 $vbox->pack_start ($hbox, 0,0,0);
 
-my $quit = Gtk2::Button->new_with_label ('Quit');
+my $quit = Gtk2::Button->new_from_stock ('gtk-quit');
 $quit->signal_connect (clicked => sub { $toplevel->destroy; });
 $hbox->pack_start ($quit, 0,0,0);
 

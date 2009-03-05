@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2007, 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -17,14 +17,13 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
-
 use strict;
 use warnings;
 use Gtk2::Ex::DateSpinner;
-use Test::More tests => 6;
+use Test::More tests => 5;
 
 
-my $want_version = 3;
+my $want_version = 4;
 ok ($Gtk2::Ex::DateSpinner::VERSION >= $want_version, 'VERSION variable');
 ok (Gtk2::Ex::DateSpinner->VERSION  >= $want_version, 'VERSION class method');
 Gtk2::Ex::DateSpinner->VERSION ($want_version);
@@ -51,6 +50,9 @@ diag ("Running on       Gtk version ",
       Gtk2::minor_version(), ".",
       Gtk2::micro_version(), ".");
 
+#------------------------------------------------------------------------------
+# weakening
+
 # no circular reference between the datespinner and the spinbuttons
 # within it
 {
@@ -61,21 +63,6 @@ diag ("Running on       Gtk version ",
   require Scalar::Util;
   Scalar::Util::weaken ($datespinner);
   is ($datespinner, undef, 'should be garbage collected when weakened');
-}
-
-my $have_test_weaken = eval { require Test::Weaken };
-if (! $have_test_weaken) { diag "No Test::Weaken -- $@"; }
-
-SKIP: {
-  $have_test_weaken or skip "Test::Weaken not available: $@", 1;
-
-  my @weaken = Test::Weaken::poof(sub {
-                                    [ Gtk2::Ex::DateSpinner->new ]
-                                  });
-  is ($weaken[0], 0, 'Test::Weaken deep garbage collection');
-  require Data::Dumper;
-  # show how many sub-objects examined, and what if anything was left over
-  diag (Data::Dumper->Dump([\@weaken],['Test-Weaken']));
 }
 
 exit 0;

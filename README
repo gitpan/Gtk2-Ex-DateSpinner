@@ -18,10 +18,18 @@ with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
 Gtk2::Ex::DateSpinner is a simple date entry widget using spin buttons
-for year, month and day.  It can be used in a dialog, or as a popup
-cell edit in a TreeView or similar.  The prerequisites are Gtk2-Perl
-and Date::Calc.  The DateSpinner home page is
+for year, month and day.
 
-    http://www.geocities.com/user42_kevin/gtk2-ex-datespinner/index.html
+      +--------------------------------------+ 
+      |  +------+   +----+   +----+          |
+      |  | 2008 |^  |  6 |^  | 14 |^   Sat   |
+      |  +------+v  +----+v  +----+v         |
+      +--------------------------------------+ 
 
-Bug reports to the author at user42@zip.com.au please.
+It can be used as an ordinary widget in a dialog or form, and also as
+a cell renderer with popup edit for a TreeView or similar.
+
+The prerequisites are Gtk2-Perl, Date::Calc and my Gtk2-Ex-WidgetBits
+and Glib-Ex-ObjectBits.  The DateSpinner home page is
+
+http://www.geocities.com/user42_kevin/gtk2-ex-datespinner/index.html

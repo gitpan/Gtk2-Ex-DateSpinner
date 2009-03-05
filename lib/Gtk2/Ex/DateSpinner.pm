@@ -21,7 +21,7 @@ use warnings;
 use Date::Calc;
 use Gtk2;
 
-our $VERSION = 3;
+our $VERSION = 4;
 
 use constant DEBUG => 0;
 
@@ -42,23 +42,26 @@ sub INIT_INSTANCE {
   my $year_adj = Gtk2::Adjustment->new (2000,    # initial
                                         0, 9999, # range
                                         1,       # step increment
-                                        10, 10); # page
+                                        10,      # page_increment
+                                        0);      # page_size (not applicable)
   my $year = $self->{'year'} = Gtk2::SpinButton->new ($year_adj, 1, 0);
   $year->show;
   $self->pack_start ($year, 0,0,0);
 
   my $month_adj = Gtk2::Adjustment->new (1,      # initial
                                          0, 99,  # range
-                                         1,      # step increment
-                                         1, 1);  # page
+                                         1,      # step_increment
+                                         1,      # page_increment
+                                         0);     # page_size (not applicable)
   my $month = $self->{'month'} = Gtk2::SpinButton->new ($month_adj, 1, 0);
   $month->show;
   $self->pack_start ($month, 0,0,0);
 
-  my $day_adj = Gtk2::Adjustment->new (1,        # initial
-                                       0, 99,    # range
-                                       1,        # step increment
-                                       1, 1);    # page
+  my $day_adj = Gtk2::Adjustment->new (1,      # initial
+                                       0, 99,  # range
+                                       1,      # step_increment
+                                       1,      # page_increment
+                                       0);     # page_size (not applicable)
   my $day = $self->{'day'} = Gtk2::SpinButton->new ($day_adj, 1, 0);
   $day->show;
   $self->pack_start ($day, 0,0,0);
@@ -180,16 +183,16 @@ to the right.
 There's lots ways to enter/display a date.  This style is good for clicking
 to a nearby date, but also allows a date to be typed in if a long way away.
 
-If a click or entered value takes the day outside the range 1 to however
-many days in the month then it wraps around to the next or previous month.
-Likewise the month wraps around to the next or previous year.  The day of
-the week display updates once you press enter or tab when typing in a
-number.
+If a click or entered value takes the day outside the days in the month then
+it wraps around to the next or previous month.  Likewise the month wraps
+around to the next or previous year.  The day of the week display updates
+once you press enter or tab when typing in a number.
 
 Day of the week and date normalization calculations use C<Date::Calc> so
-they're not limited to system C<time_t> (which may be as little as 1970 to
-2038 on a 32-bit system).  The day name uses C<POSIX::strftime> and gets the
-usual localizations at Perl startup.
+they're not limited to the system C<time_t> (which may be as little as 1970
+to 2038 on a 32-bit system).  The day name uses C<POSIX::strftime> and gets
+the usual C<LC_TIME> localizations established at Perl startup or Gtk
+initialization.
 
 =head1 FUNCTIONS
 
@@ -216,7 +219,7 @@ Set the C<value> in C<$ds> to today's date (today in the local timezone).
 
 The current date value, as an ISO format "YYYY-MM-DD" string.  When you read
 this the day and month are always "normalized", so MM is 01 to 12 and DD is
-01 to 28,29,30,31, however many days in the particular month.
+01 to 28,29,30 or 31, however many days in the particular month.
 
 The default 1 January 2000 is meant to be fairly useless and you should set
 it to something that makes sense for the particular application.
@@ -250,6 +253,6 @@ or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
 more details.
 
 You should have received a copy of the GNU General Public License along with
-Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
+Gtk2-Ex-DateSpinner.  If not, see L<http://www.gnu.org/licenses/>.
 
 =cut

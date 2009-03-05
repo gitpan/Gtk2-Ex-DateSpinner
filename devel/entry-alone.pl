@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2009 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -17,31 +17,32 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
-
 use strict;
 use warnings;
-use Gtk2::Ex::DateSpinner::PopupForEntry;
-use Test::More tests => 3;
+use Gtk2 '-init';
+use Gtk2::Ex::DateSpinner::EntryWithCancel;
 
-
-my $want_version = 4;
-ok ($Gtk2::Ex::DateSpinner::PopupForEntry::VERSION >= $want_version,
-    'VERSION variable');
-ok (Gtk2::Ex::DateSpinner::PopupForEntry->VERSION >= $want_version,
-    'VERSION class method');
-Gtk2::Ex::DateSpinner::PopupForEntry->VERSION ($want_version);
-ok (! eval { Gtk2::Ex::DateSpinner::PopupForEntry->VERSION ($want_version + 1000) },
-   'VERSION demand beyond current');
-
-
-sub container_children_recursively {
-  my ($widget) = @_;
-  if ($widget->can('get_children')) {
-    return ($widget,
-            map { container_children_recursively($_) } $widget->get_children);
-  } else {
-    return ($widget);
-  }
+{
+  my $foo = Gtk2::BindingSet->find
+    ('Gtk2__Ex__DateSpinner__EntryWithCancel_keys');
+  print "find ",($foo||'false'),"\n";
 }
+
+my $entry = Gtk2::Ex::DateSpinner::EntryWithCancel->new;
+
+# bindingset comes into existence when a widget has gtksettings which ask
+# the rc mechanism to parse its files
+{
+  my $foo = Gtk2::BindingSet->find
+    ('Gtk2__Ex__DateSpinner__EntryWithCancel_keys');
+  print "find ",($foo||'false'),"\n";
+}
+
+my $toplevel = Gtk2::Window->new ('toplevel');
+$toplevel->add($entry);
+
+$entry->signal_connect (cancel => sub { print "cancel action runs\n"; });
+$entry->bindings_activate (Gtk2::Gdk->keyval_from_name('Escape'),[]);
+
 
 exit 0;

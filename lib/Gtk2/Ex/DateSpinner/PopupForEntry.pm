@@ -21,7 +21,7 @@ use warnings;
 use Gtk2;
 use List::Util qw(min max);
 
-our $VERSION = 3;
+our $VERSION = 4;
 
 use constant DEBUG => 0;
 
@@ -243,8 +243,8 @@ sub _do_position {
     print "  alloc ",$alloc->width,"x",$alloc->height,"\n";
   }
 
-  my $toplevel = $entry->get_toplevel; # $entry itself if no toplevel
-  $self->set_transient_for($toplevel->isa('Gtk2::Window') ? $toplevel : undef);
+  my $toplevel = $entry->get_ancestor ('Gtk2::Window'); # undef if no toplevel
+  $self->set_transient_for ($toplevel);
 
   my $win = $entry->window;
   if ($win) {
@@ -345,12 +345,11 @@ B<Caution: This is internals of C<Gtk2::Ex::DateSpinner::CellRenderer>.  The
 idea of a popup under an edited cell might be split out under a new name at
 some time though, or even the idea of a DateSpinner popup standing alone.>
 
-C<DateSpinner::PopupForEntry> is a toplevel window holding a
-C<Gtk2::Ex::DateSpinner> and Ok and Cancel buttons.  It positions itself
-under a given C<Gtk2::Entry> (or subclass) and communicates its value back
-and forward with that Entry for dual editing.  Only a weak reference is held
-on the Entry and when the entry is destroyed the PopupForEntry is destroyed
-too.
+C<DateSpinner::PopupForEntry> hols a C<Gtk2::Ex::DateSpinner> and Ok and
+Cancel buttons.  It positions itself under a given C<Gtk2::Entry> (or
+subclass of C<Gtk2::Entry>) and communicates its value back and forward with
+that Entry for dual editing.  Only a weak reference is held on the Entry and
+when the entry is destroyed the PopupForEntry is closed and destroyed too.
 
 =head1 PROPERTIES
 
@@ -383,6 +382,6 @@ or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
 more details.
 
 You should have received a copy of the GNU General Public License along with
-Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
+Gtk2-Ex-DateSpinner.  If not, see L<http://www.gnu.org/licenses/>.
 
 =cut

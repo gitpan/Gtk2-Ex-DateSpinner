@@ -16,9 +16,9 @@
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# "libtest-pod-perl (>= 1.00)" and "libtest-weaken-perl" could be in
-# Build-Depends for more tests, but they're optional and just make the
-# build tools drag in more stuff.
+# Build-Depends could have "libtest-pod-perl (>= 1.00),
+# libtest-weaken-perl (>= 2.000)" for more tests, but they're optional
+# and just make the build tools drag in more stuff.
 
 Source: libgtk2-ex-datespinner-perl
 Section: perl

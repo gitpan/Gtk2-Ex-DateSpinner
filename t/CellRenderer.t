@@ -21,17 +21,18 @@
 use strict;
 use warnings;
 use Gtk2::Ex::DateSpinner::CellRenderer;
-use Test::More tests => 10;
+use Test::More tests => 8;
 
 
-my $want_version = 3;
+my $want_version = 4;
 ok ($Gtk2::Ex::DateSpinner::CellRenderer::VERSION >= $want_version,
     'VERSION variable');
 ok (Gtk2::Ex::DateSpinner::CellRenderer->VERSION  >= $want_version,
     'VERSION class method');
-Gtk2::Ex::DateSpinner::CellRenderer->VERSION ($want_version);
-ok (! eval { Gtk2::Ex::DateSpinner::CellRenderer->VERSION ($want_version + 1000) },
-    'VERSION demand beyond current');
+ok (eval { Gtk2::Ex::DateSpinner::CellRenderer->VERSION($want_version); 1 },
+    "VERSION class check $want_version");
+ok (! eval { Gtk2::Ex::DateSpinner::CellRenderer->VERSION($want_version + 1000); 1 },
+    "VERSION class check " . ($want_version + 1000));
 
 require Gtk2;
 diag ("Perl-Gtk2 version ",Gtk2->VERSION);
@@ -59,11 +60,8 @@ sub main_iterations {
     $count++;
     Gtk2->main_iteration_do (0);
   }
-  print "main_iterations(): ran $count events/iterations\n";
+  diag "main_iterations(): ran $count events/iterations\n";
 }
-
-my $have_test_weaken = eval { require Test::Weaken };
-if (! $have_test_weaken) { diag "No Test::Weaken -- $@"; }
 
 
 #-----------------------------------------------------------------------------
@@ -79,21 +77,10 @@ if (! $have_test_weaken) { diag "No Test::Weaken -- $@"; }
   is ($renderer, undef, 'should be garbage collected when weakened');
 }
 
-SKIP: {
-  $have_test_weaken or skip 'Test::Weaken not available', 1;
-
-  my @weaken = Test::Weaken::poof(sub {
-                                    [ Gtk2::Ex::DateSpinner::CellRenderer->new ]
-                                  });
-  is ($weaken[0], 0, 'Test::Weaken deep garbage collection');
-  require Data::Dumper;
-  # show how many sub-objects examined, and what if anything was left over
-  diag (Data::Dumper->Dump([\@weaken],['Test-Weaken']));
-}
-
 #-----------------------------------------------------------------------------
 # start_editing return object
 
+Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
 my $have_display = Gtk2->init_check;
 
 SKIP: {
@@ -115,34 +102,6 @@ SKIP: {
   require Scalar::Util;
   Scalar::Util::weaken ($editable);
   is ($editable, undef, 'editable should be garbage collected when weakened');
-
-  $toplevel->destroy;
-}
-
-SKIP: {
-  ($have_display && $have_test_weaken)
-    or skip 'no DISPLAY and/or no Test::Weaken available', 2;
-
-  my $toplevel = Gtk2::Window->new ('toplevel');
-  my $renderer = Gtk2::Ex::DateSpinner::CellRenderer->new (editable => 1);
-  my @weaken = Test::Weaken::poof
-    (sub {
-       my $event = Gtk2::Gdk::Event->new ('button-press');
-       my $rect = Gtk2::Gdk::Rectangle->new (0, 0, 100, 100);
-       my $editable = $renderer->start_editing
-         ($event, $toplevel, "0", $rect, $rect, ['selected']);
-       isa_ok ($editable, 'Gtk2::CellEditable',
-               'start_editing return');
-       $toplevel->add ($editable);
-       $toplevel->remove ($editable);
-       main_iterations (); # for idle handler hack
-
-       [ $editable ]
-     });
-  is ($weaken[0], 0, 'Test::Weaken deep garbage collection of start_editing');
-  require Data::Dumper;
-  # show how many sub-objects examined, and what if anything was left over
-  diag (Data::Dumper->Dump([\@weaken],['Test-Weaken']));
 
   $toplevel->destroy;
 }

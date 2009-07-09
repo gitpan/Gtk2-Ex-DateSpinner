@@ -24,14 +24,26 @@ use Gtk2::Ex::DateSpinner::PopupForEntry;
 use Gtk2::Ex::DateSpinner::CellRenderer;
 use Test::More;
 
-my $have_test_weaken = eval "use Test::Weaken 2.000; 1";
+use constant DEBUG => 1;
+
+# seem to need a DISPLAY initialized in gtk 2.16 or get a slew of warnings
+# creating a Gtk2::Ex::DateSpinner
+Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
+Gtk2->init_check
+  or plan skip_all => "due to no DISPLAY available";
+
+# Test::Weaken 3 for "contents"
+my $have_test_weaken = eval "use Test::Weaken 3; 1";
 if (! $have_test_weaken) {
-  plan skip_all => "due to Test::Weaken 2.000 not available -- $@";
+  plan skip_all => "due to Test::Weaken 3 not available -- $@";
 }
-
-plan tests => 5;
-
 diag ("Test::Weaken version ", Test::Weaken->VERSION);
+
+plan tests => 6;
+
+SKIP: { eval 'use Test::NoWarnings; 1'
+          or skip 'Test::NoWarnings not available', 1; }
+
 require Gtk2;
 diag ("Perl-Gtk2    version ",Gtk2->VERSION);
 diag ("Perl-Glib    version ",Glib->VERSION);
@@ -60,25 +72,34 @@ sub main_iterations {
   }
   diag "main_iterations(): ran $count events/iterations\n";
 }
-
-sub container_children_recursively {
-  my ($widget) = @_;
-  if ($widget->can('get_children')) {
-    return ($widget,
-            map { container_children_recursively($_) } $widget->get_children);
-  } else {
-    return ($widget);
+sub contents_container {
+  my ($ref) = @_;
+  require Scalar::Util;
+  (Scalar::Util::blessed ($ref) && $ref->isa('Gtk2::Container'))
+    or return;
+  if (DEBUG) { Test::More::diag ("contents ",ref $ref); }
+  return $ref->get_children;
+}
+# taking either a Gtk2::Window or an array whose first element is one
+sub destructor_destroy {
+  my ($ref) = @_;
+  if (ref $ref eq 'ARRAY') {
+    $ref = $ref->[0];
   }
+  $ref->destroy;
+
+  # iterate to make WidgetCursor go unbusy
+  main_iterations();
 }
 
 #------------------------------------------------------------------------------
 # DateSpinner
 
+diag "DateSpinner";
 {
   my $leaks = Test::Weaken::leaks
-    (sub {
-       my $ds = Gtk2::Ex::DateSpinner->new;
-       return [ $ds, container_children_recursively($ds) ];
+    ({ constructor => sub { return Gtk2::Ex::DateSpinner->new },
+       contents => \&contents_container,
      });
   is ($leaks, undef, 'DateSpinner deep garbage collection');
   if ($leaks) {
@@ -89,23 +110,13 @@ sub container_children_recursively {
 #------------------------------------------------------------------------------
 # DateSpinner::PopupForEntry
 
-Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
-my $have_display = Gtk2->init_check;
-diag "have_display: ",($have_display ? "yes" : "no");
+diag "PopupForEntry";
 
-SKIP: {
-  $have_display or skip 'due to no DISPLAY available', 1;
-
+{
   my $leaks = Test::Weaken::leaks
-    ({ constructor => sub {
-         my $toplevel = Gtk2::Ex::DateSpinner::PopupForEntry->new;
-         return [ $toplevel, container_children_recursively($toplevel) ];
-       },
-       destructor => sub {
-         my ($aref) = @_;
-         my $toplevel = $aref->[0];
-         $toplevel->destroy;
-       }
+    ({ constructor => sub { return Gtk2::Ex::DateSpinner::PopupForEntry->new },
+       destructor => \&destructor_destroy,
+       contents => \&contents_container,
      });
   is ($leaks, undef, 'PopupForEntry garbage collection');
   if ($leaks) {
@@ -125,9 +136,7 @@ SKIP: {
   }
 }
 
-SKIP: {
-  $have_display or skip 'due to no DISPLAY available', 2;
-
+{
   my $toplevel = Gtk2::Window->new ('toplevel');
   my $renderer = Gtk2::Ex::DateSpinner::CellRenderer->new (editable => 1);
 
@@ -139,14 +148,14 @@ SKIP: {
            ($event, $toplevel, "0", $rect, $rect, ['selected']);
          isa_ok ($editable, 'Gtk2::CellEditable', 'start_editing return');
          $toplevel->add ($editable);
-         return [ $editable, container_children_recursively($editable) ];
+         return $editable;
        },
        destructor => sub {
-         my ($aref) = @_;
-         my $editable = $aref->[0];
+         my ($editable) = @_;
          $toplevel->remove ($editable);
          main_iterations (); # for idle handler hack for Gtk2 1.202
-       }
+       },
+       contents => \&contents_container,
      });
   is ($leaks, undef, 'CellRenderer garbage collection -- after start_editing');
   if ($leaks) {

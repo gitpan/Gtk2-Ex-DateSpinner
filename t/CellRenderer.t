@@ -21,18 +21,22 @@
 use strict;
 use warnings;
 use Gtk2::Ex::DateSpinner::CellRenderer;
-use Test::More tests => 8;
+use Test::More tests => 11;
 
+SKIP: { eval 'use Test::NoWarnings; 1'
+          or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 4;
+my $want_version = 5;
 ok ($Gtk2::Ex::DateSpinner::CellRenderer::VERSION >= $want_version,
     'VERSION variable');
 ok (Gtk2::Ex::DateSpinner::CellRenderer->VERSION  >= $want_version,
     'VERSION class method');
 ok (eval { Gtk2::Ex::DateSpinner::CellRenderer->VERSION($want_version); 1 },
     "VERSION class check $want_version");
-ok (! eval { Gtk2::Ex::DateSpinner::CellRenderer->VERSION($want_version + 1000); 1 },
-    "VERSION class check " . ($want_version + 1000));
+{ my $check_version = $want_version + 1000;
+  ok (! eval{Gtk2::Ex::DateSpinner::CellRenderer->VERSION($check_version); 1},
+      "VERSION class check $check_version");
+}
 
 require Gtk2;
 diag ("Perl-Gtk2 version ",Gtk2->VERSION);
@@ -69,8 +73,13 @@ sub main_iterations {
 
 {
   my $renderer = Gtk2::Ex::DateSpinner::CellRenderer->new;
+
   ok ($renderer->VERSION >= $want_version, 'VERSION object method');
-  $renderer->VERSION ($want_version);
+  ok (eval { $renderer->VERSION($want_version); 1 },
+      "VERSION object check $want_version");
+  my $check_version = $want_version + 1000;
+  ok (! eval { $renderer->VERSION($check_version); 1 },
+      "VERSION object check $check_version");
 
   require Scalar::Util;
   Scalar::Util::weaken ($renderer);

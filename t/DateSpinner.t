@@ -20,15 +20,20 @@
 use strict;
 use warnings;
 use Gtk2::Ex::DateSpinner;
-use Test::More tests => 5;
+use Test::More tests => 9;
 
+SKIP: { eval 'use Test::NoWarnings; 1'
+          or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 4;
+my $want_version = 5;
 ok ($Gtk2::Ex::DateSpinner::VERSION >= $want_version, 'VERSION variable');
 ok (Gtk2::Ex::DateSpinner->VERSION  >= $want_version, 'VERSION class method');
-Gtk2::Ex::DateSpinner->VERSION ($want_version);
-ok (! eval { Gtk2::Ex::DateSpinner->VERSION ($want_version + 1000) },
-    'VERSION demand beyond current');
+ok (eval { Gtk2::Ex::DateSpinner->VERSION($want_version); 1 },
+    "VERSION class check $want_version");
+{ my $check_version = $want_version + 1000;
+  ok (! eval{Gtk2::Ex::DateSpinner->VERSION($check_version); 1},
+      "VERSION class check $check_version");
+}
 
 require Gtk2;
 diag ("Perl-Gtk2 version ",Gtk2->VERSION);
@@ -52,13 +57,27 @@ diag ("Running on       Gtk version ",
 
 #------------------------------------------------------------------------------
 # weakening
-
+#
 # no circular reference between the datespinner and the spinbuttons
 # within it
-{
+
+Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
+my $have_display = Gtk2->init_check;
+
+SKIP: {
+  # seem to need a DISPLAY initialized in gtk 2.16 or get a slew of warnings
+  # creating a Gtk2::Ex::DateSpinner
+  $have_display
+    or skip "due to no DISPLAY available", 4;
+
   my $datespinner = Gtk2::Ex::DateSpinner->new;
-  ok ($datespinner->VERSION  >= $want_version, 'VERSION object method');
-  $datespinner->VERSION ($want_version);
+
+  ok ($datespinner->VERSION >= $want_version, 'VERSION object method');
+  ok (eval { $datespinner->VERSION($want_version); 1 },
+      "VERSION object check $want_version");
+  my $check_version = $want_version + 1000;
+  ok (! eval { $datespinner->VERSION($check_version); 1 },
+      "VERSION object check $check_version");
 
   require Scalar::Util;
   Scalar::Util::weaken ($datespinner);

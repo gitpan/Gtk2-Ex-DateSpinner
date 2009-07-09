@@ -32,4 +32,4 @@ a cell renderer with popup edit for a TreeView or similar.
 The prerequisites are Gtk2-Perl, Date::Calc and my Gtk2-Ex-WidgetBits
 and Glib-Ex-ObjectBits.  The DateSpinner home page is
 
-http://www.geocities.com/user42_kevin/gtk2-ex-datespinner/index.html
+  http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html

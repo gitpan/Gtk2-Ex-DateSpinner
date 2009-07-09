@@ -16,11 +16,12 @@
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 package Gtk2::Ex::DateSpinner::CellRenderer;
+use 5.008;
 use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 4;
+our $VERSION = 5;
 
 use constant DEBUG => 0;
 
@@ -209,7 +210,7 @@ use.
 
 =head1 HOME PAGE
 
-L<http://www.geocities.com/user42_kevin/gtk2-ex-datespinner/index.html>
+L<http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html>
 
 =head1 LICENSE
 

@@ -16,12 +16,13 @@
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 package Gtk2::Ex::DateSpinner::PopupForEntry;
+use 5.008;
 use strict;
 use warnings;
 use Gtk2;
 use List::Util qw(min max);
 
-our $VERSION = 4;
+our $VERSION = 5;
 
 use constant DEBUG => 0;
 
@@ -365,7 +366,7 @@ L<Gtk2::Ex::DateSpinner::CellRenderer>, L<Gtk2::Window>
 
 =head1 HOME PAGE
 
-L<http://www.geocities.com/user42_kevin/gtk2-ex-datespinner/index.html>
+L<http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html>
 
 =head1 LICENSE
 

@@ -16,12 +16,13 @@
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 package Gtk2::Ex::DateSpinner::EntryWithCancel;
+use 5.008;
 use strict;
 use warnings;
 # version 1.180 for perl subclass to override GInterfaces from superclass
 use Gtk2 1.180;
 
-our $VERSION = 4;
+our $VERSION = 5;
 
 use constant DEBUG => 0;
 
@@ -226,7 +227,7 @@ L<Gtk2::Entry>, L<Glib::Object>
 
 =head1 HOME PAGE
 
-L<http://www.geocities.com/user42_kevin/gtk2-ex-datespinner/index.html>
+L<http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html>
 
 =head1 LICENSE
 

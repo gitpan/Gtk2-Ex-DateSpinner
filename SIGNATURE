@@ -15,40 +15,44 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 8624bcdae55baeef00cd11d5dfcfa60f68710a02 COPYING
-SHA1 e577c15da0577c5e0159003041c836ffe460ff02 Changes
-SHA1 e6ff149cd99acb56b12d7cd0f155203d10c56d64 MANIFEST
-SHA1 0d6b9ab4acb5c2dca218b6b76d25579a77825209 MANIFEST.SKIP
-SHA1 fc591bd6c6a65ac5db1d92a31b14bcbcfa3e479e META.yml
-SHA1 fd87f505045e9a1915cdf23bbd67bf7f25993e93 Makefile.PL
-SHA1 71a09e9264f84c7b72805d205be5b4e521705d96 README
-SHA1 8fe43cd2f80f5b7bb50dde24a7858c3dca31f6d6 debian/changelog
-SHA1 1b6453892473a467d07372d45eb05abc2031647a debian/compat
-SHA1 fd577ca3161674f72638bfb7d5c4e0994edb733f debian/control
-SHA1 404415746c462069a2dc486311f12f791ad6f73c debian/copyright
+SHA1 2316af638344f08113cce2644f24c1c7e429a553 Changes
+SHA1 66327e8828ff038d56e77fa28cec744a85f894a3 MANIFEST
+SHA1 3a4089506b84677c7702c03039d9053e00a9a68b MANIFEST.SKIP
+SHA1 7502390efa8b115e5dd1a140e0fe4598399e948b META.yml
+SHA1 20ee02b7ac589eca9b6129d884cd949cf87cccef Makefile.PL
+SHA1 5693651fab1604c17719fe5e761629465a3cf0a2 README
+SHA1 5f9d77557ee8b52b2cd5837c081fe9dd97ce96fb debian/changelog
+SHA1 ac3478d69a3c81fa62e60f5c3696165a4e5e6ac4 debian/compat
+SHA1 096c2f5ff03fdfc3ccbec79ba27000987340b1c0 debian/control
+SHA1 3ef17ee3331d2eb50044d7100e1bfe7b8b3691f1 debian/copyright
 SHA1 de6d54e18861079bcfef3df0397188f717b7aea9 debian/rules
-SHA1 e71e56c528c2310d9df9db80896a2849d3c6c97c debian/watch
+SHA1 8d74b057ea03c66f4729a4a630561d5d46431835 debian/watch
 SHA1 625591dae10b380bdf8ae1313a58c35b8a42faf1 devel/cell.pl
 SHA1 f0ab6011085b8bf37663bfa6d45a7dbb5f0360a5 devel/entry-alone.pl
 SHA1 a121fd9dbed0844ee5ec97c9e7400f2c61e8bab0 devel/entry-with-cancel.pl
 SHA1 b0b56a1f2f9bef05706b3ab0dbf0fbbc466c0a88 devel/run.pl
-SHA1 e2b0fb905cdcc7ab39b17de8331b9e436a6ed38c devel/screenshot.pl
+SHA1 aa2c643d53b749af5e717d8db69097f897044537 devel/screenshot.pl
 SHA1 8b36c6601d61e1d4a68e5f5ff987232981867585 examples/builder.pl
 SHA1 e4697f1c62b0c8c5be09daa88405bca0c4ca9e89 examples/cellrenderer.pl
 SHA1 123dab7272e244b4da382e65f93186581d0e7028 examples/simple.pl
-SHA1 e9e19ae227721e0df88abbe11ce8b0924461496e lib/Gtk2/Ex/DateSpinner.pm
-SHA1 4211bdfd2843ab9e3d6258238cc23707191b3afb lib/Gtk2/Ex/DateSpinner/CellRenderer.pm
-SHA1 815fed3addf618f5edac736d764c0c531df00d19 lib/Gtk2/Ex/DateSpinner/EntryWithCancel.pm
-SHA1 eecb49432ea1a221015c015fab90ff1630b69b12 lib/Gtk2/Ex/DateSpinner/PopupForEntry.pm
-SHA1 93fdd0b13bf99f7afebfa9f5779194090427d4bf t/CellRenderer.t
-SHA1 48968770b5f14a9a99f83e1fad6aa34b24f875db t/DateSpinner.t
-SHA1 05328dd6c6b8e2f925cdd736361a73959a13d2b1 t/EntryWithCancel.t
-SHA1 bc53e5c26d353eb61ace3c0ddef51792471a1a38 t/PopupForEntry.t
-SHA1 a661a39e55a4127aecb1b97a631c4f01f7dce8c6 t/pod.t
-SHA1 2561fc1485cf47d368f0e7fc32f23fec6d22dcd6 t/test-weaken.t
+SHA1 dd75c81beed02ba328b91d23327dfb8d991ee31a inc/MyMakeMakerExtras.pm
+SHA1 ce479df19e730ad1a863a747272a726a0fae7d15 lib/Gtk2/Ex/DateSpinner.pm
+SHA1 5852ea9563d855821d7664d399d78833b2f479d2 lib/Gtk2/Ex/DateSpinner/CellRenderer.pm
+SHA1 ec09b60910a70c1933b6a0b4b7a767f989181234 lib/Gtk2/Ex/DateSpinner/EntryWithCancel.pm
+SHA1 df089ae4effe5f85d6ad8c31aa27ae854b839068 lib/Gtk2/Ex/DateSpinner/PopupForEntry.pm
+SHA1 4351c3885de5689729bfeda126cd22dfe7b21260 t/0-META-read.t
+SHA1 a343ed4dce96d05de51eed1ec065911584b96fce t/0-Test-DistManifest.t
+SHA1 bba0dc087cbe64d8f100ab77e6cef061c0bebf27 t/0-Test-Pod.t
+SHA1 b598034514d17a3fca856b43e9e680248905329d t/0-Test-YAML-Meta.t
+SHA1 c7946e78ae8f1157d1e5857ca354529e0261205f t/CellRenderer.t
+SHA1 2f806777d5fd4fe7d109fb7b9bfc0da763b76083 t/DateSpinner.t
+SHA1 5bc78e6609433285cb28cbcdfd979845d623e18f t/EntryWithCancel.t
+SHA1 359029c5ebd6fa6f52e6c6b4fdd57166d41eed29 t/PopupForEntry.t
+SHA1 d5ceb64e11253ec3bd6685be2b2becb042f784db t/test-weaken.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.9 (GNU/Linux)
 
-iD8DBQFJsElOLFMCIV9q3ToRAuujAJ9Q+RjfZTTLBAvl7NWGceG5Lm/S7wCbB4+/
-bh0RfLv54sXFN5H5kTJotiI=
-=qDzj
+iD8DBQFKVnITLFMCIV9q3ToRAg5jAKCh9/G9N8+Dt5d9h6mG7T04/zNLzACcCufC
+OqZsP5lvszZ8EjnJh2EjbJM=
+=UCRS
 -----END PGP SIGNATURE-----

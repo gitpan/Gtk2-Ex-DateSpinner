@@ -21,6 +21,8 @@ use 5.008;
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
+use lib 'inc';
+use MyMakeMakerExtras;
 
 WriteMakefile
   (NAME         => 'Gtk2-Ex-DateSpinner',
@@ -29,6 +31,7 @@ WriteMakefile
    AUTHOR       => 'Kevin Ryde <user42@zip.com.au>',
    LICENSE      => 'gpl',
    SIGN         => 1,
+   MIN_PERL_VERSION => '5.008',
 
    PREREQ_PM    => {
                     # 5.0 for new style Add_Delta_YMD() probably,
@@ -50,46 +53,41 @@ optional_features:
     maximum_tests:
         description: Have "make test" do as much as possible.
         requires:
+            Test::Weaken: 3
             Test::Pod: 1.00
-            Test::Weaken: 1.000
-            Gtk2: 0
+            Test::NoWarnings: 0
+            Parse::CPAN::Meta: 0
+            Test::DistManifest: 0
+            Test::YAML::Meta: 0
+            YAML: 0
+            YAML::Syck: 0
+            YAML::Tiny: 0
+            YAML::XS: 0
 no_index:
     directory:
         - devel
+        - inc
+        - t
 resources:
-    homepage: http://www.geocities.com/user42_kevin/gtk2-ex-datespinner/index.html
-    license: http://www.gnu.org/licenses/#GPL
+    homepage: http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html
+    license: http://www.gnu.org/licenses/gpl.html
 HERE
   );
 
-
+#------------------------------------------------------------------------------
 package MY;
-use strict;
-use warnings;
-
 sub postamble {
-  print "MY::postamble extras ...\n";
-  return <<'MAKE_FRAG';
+  my ($makemaker) = @_;
+  return MyMakeMakerExtras::postamble ($makemaker) . <<'HERE';
+
+#----------------------------------------------------------------------------
+# extras from MY::postamble()
 
 DateSpinner.html: lib/Gtk2/Ex/DateSpinner.pm Makefile
 	-perl -MPod::Simple::HTML -e Pod::Simple::HTML::go \
 	  lib/Gtk2/Ex/DateSpinner.pm \
 	| sed 's!http://search.cpan.org/perldoc?Gtk2%3A%3A\([^"%]*\)"!http://gtk2-perl.sourceforge.net/doc/pod/Gtk2/\1.html"!' \
 	  >DateSpinner.html
-
-myman:
-	mv MANIFEST MANIFEST.old
-	touch SIGNATURE
-	(make manifest 2>&1; diff -u MANIFEST.old MANIFEST) |less
-
-LINT_FILES = $(TO_INST_PM) t/*.t examples/*.pl devel/*.pl
-lint:
-	for i in $(LINT_FILES); do perl -MO=Lint $$i; done
-pc:
-	-podchecker $(LINT_FILES)
-	perlcritic $(LINT_FILES)
-unused:
-	for i in $(LINT_FILES); do perl -Mwarnings::unused -I lib $$i; done
 
 mydist:
 	make dist COMPRESS='gzip --force --best'
@@ -99,55 +97,11 @@ mydist:
 	(cd mydist.tmp; \
 	 tar xfz ../$(DISTVNAME).tar.gz; \
 	 cd $(DISTVNAME); \
-	perl -e '!eval{require YAML} || YAML::LoadFile("META.yml")' \
-	 && echo YAML reads ok; \
-	perl -e '!eval{require YAML::Tiny} || YAML::Tiny->read("META.yml")' \
-	 && echo YAML::Tiny reads ok; \
 	cpansign -v; \
 	perl Makefile.PL SIGN=0; \
 	make debug-constants-check; \
 	)
 	rm -rf mydist.tmp
 
-# find files in the dist with mod times this year, but without this year in
-# the copyright line
-copyright-years-check:
-	year=`date +%Y`; \
-	tar tvfz $(DISTVNAME).tar.gz \
-	| egrep '$$year-|debian/copyright' \
-	| sed 's:^.*$(DISTVNAME)/::' \
-	| (result=0; \
-	  while read i; do \
-	    case $$i in \
-	      '' | */ \
-	      | debian/changelog | debian/compat \
-	      | t/pod.t \
-	      | COPYING | MANIFEST* | SIGNATURE | META.yml) \
-	      continue ;; \
-	    esac; \
-	    if test -e "$(srcdir)/$$i"; then f="$(srcdir)/$$i"; \
-	    else f="$$i"; fi; \
-	    if ! grep -q "Copyright.*$$year" $$f; then \
-	      echo "$$i":"1: this file"; \
-	      grep Copyright $$f; \
-	      result=1; \
-	    fi; \
-	  done; \
-	  exit $$result)
-
-debug-constants-check:
-	if egrep -n 'DEBUG => [^0]' $(TO_INST_PM); then exit 1; else exit 0; fi
-
-diff-prev:
-	rm -rf diff.tmp
-	mkdir diff.tmp
-	cd diff.tmp \
-	&& tar xfz ../$(NAME)-`expr $(VERSION) - 1`.tar.gz \
-	&& tar xfz ../$(NAME)-$(VERSION).tar.gz
-	-cd diff.tmp; diff -ur $(NAME)-`expr $(VERSION) - 1` \
-	                       $(NAME)-$(VERSION) >tree.diff
-	-less diff.tmp/tree.diff
-	rm -rf diff.tmp
-
-MAKE_FRAG
+HERE
 }

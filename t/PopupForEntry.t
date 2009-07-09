@@ -21,27 +21,21 @@
 use strict;
 use warnings;
 use Gtk2::Ex::DateSpinner::PopupForEntry;
-use Test::More tests => 3;
+use Test::More tests => 5;
 
+SKIP: { eval 'use Test::NoWarnings; 1'
+          or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 4;
+my $want_version = 5;
 ok ($Gtk2::Ex::DateSpinner::PopupForEntry::VERSION >= $want_version,
     'VERSION variable');
 ok (Gtk2::Ex::DateSpinner::PopupForEntry->VERSION >= $want_version,
     'VERSION class method');
-Gtk2::Ex::DateSpinner::PopupForEntry->VERSION ($want_version);
-ok (! eval { Gtk2::Ex::DateSpinner::PopupForEntry->VERSION ($want_version + 1000) },
-   'VERSION demand beyond current');
-
-
-sub container_children_recursively {
-  my ($widget) = @_;
-  if ($widget->can('get_children')) {
-    return ($widget,
-            map { container_children_recursively($_) } $widget->get_children);
-  } else {
-    return ($widget);
-  }
+ok (eval { Gtk2::Ex::DateSpinner::PopupForEntry->VERSION($want_version); 1 },
+    "VERSION class check $want_version");
+{ my $check_version = $want_version + 1000;
+  ok (! eval{Gtk2::Ex::DateSpinner::PopupForEntry->VERSION($check_version); 1},
+      "VERSION class check $check_version");
 }
 
 exit 0;

@@ -1,4 +1,4 @@
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -22,12 +22,12 @@ use warnings;
 use Date::Calc;
 use Gtk2;
 
-our $VERSION = 5;
+our $VERSION = 6;
 
 use constant DEBUG => 0;
 
 use Glib::Object::Subclass
-  Gtk2::HBox::,
+  'Gtk2::HBox',
   properties => [Glib::ParamSpec->string
                  ('value',
                   'value',
@@ -241,7 +241,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html>
 
 =head1 LICENSE
 
-Gtk2-Ex-DateSpinner is Copyright 2008, 2009 Kevin Ryde
+Gtk2-Ex-DateSpinner is Copyright 2008, 2009, 2010 Kevin Ryde
 
 Gtk2-Ex-DateSpinner is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

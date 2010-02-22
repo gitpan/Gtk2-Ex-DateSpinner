@@ -1,40 +1,43 @@
 #!/usr/bin/perl
 
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
-# This file is part of Gtk2-Ex-DateSpinner.
+# This file is part of Gtk2-Ex-WidgetBits.
 #
-# Gtk2-Ex-DateSpinner is free software; you can redistribute it and/or
+# Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as published
 # by the Free Software Foundation; either version 3, or (at your option) any
 # later version.
 #
-# Gtk2-Ex-DateSpinner is distributed in the hope that it will be useful, but
+# Gtk2-Ex-WidgetBits is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 # or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 # for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
+# with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
 
 use strict;
 use warnings;
-use Gtk2::Ex::DateSpinner::EntryWithCancel;
-use Test::More tests => 22;
+use Test::More tests => 21;
 
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 5;
-ok ($Gtk2::Ex::DateSpinner::EntryWithCancel::VERSION >= $want_version,
-    'VERSION variable');
-ok (Gtk2::Ex::DateSpinner::EntryWithCancel->VERSION >= $want_version,
-    'VERSION class method');
-ok (eval { Gtk2::Ex::DateSpinner::EntryWithCancel->VERSION($want_version); 1 },
-    "VERSION class check $want_version");
-{ my $check_version = $want_version + 1000;
-  ok (! eval{Gtk2::Ex::DateSpinner::EntryWithCancel->VERSION($check_version); 1},
+require Gtk2::Ex::Entry::WithCancel;
+
+my $want_version = 15;
+{
+  is ($Gtk2::Ex::Entry::WithCancel::VERSION, $want_version,
+      'VERSION variable');
+  is (Gtk2::Ex::Entry::WithCancel->VERSION,  $want_version,
+      'VERSION class method');
+  ok (eval { Gtk2::Ex::Entry::WithCancel->VERSION($want_version); 1 },
+      "VERSION class check $want_version");
+
+  my $check_version = $want_version + 1000;
+  ok (! eval{Gtk2::Ex::Entry::WithCancel->VERSION($check_version); 1},
       "VERSION class check $check_version");
 }
 
@@ -43,24 +46,25 @@ my $have_display = Gtk2->init_check;
 
 SKIP: {
   # seem to need a DISPLAY initialized in gtk 2.16 or get a slew of warnings
-  # creating a Gtk2::Ex::DateSpinner::EntryWithCancel
-  $have_display or skip "due to no DISPLAY available", 2;
+  # creating a Gtk2::Ex::Entry::WithCancel
+  $have_display or skip "due to no DISPLAY available", 1;
 
   # check the once-only rc bits are ok
-  ok (Gtk2::Ex::DateSpinner::EntryWithCancel->new,
+  ok (Gtk2::Ex::Entry::WithCancel->new,
       'create 1');
 
-  my $init = \&Gtk2::Ex::DateSpinner::EntryWithCancel::INIT_INSTANCE;
-  is ($init, \&Glib::FALSE,
-      'INIT_INSTANCE once-only rc bits');
+  # took this away in favour of just Gtk2::Rc at load-time ...
+  #   my $init = \&Gtk2::Ex::Entry::WithCancel::INIT_INSTANCE;
+  #   is ($init, \&Glib::FALSE,
+  #       'INIT_INSTANCE once-only rc bits');
 }
 
 SKIP: {
   $have_display or skip "due to no DISPLAY available", 15;
 
-  my $entry = Gtk2::Ex::DateSpinner::EntryWithCancel->new;
+  my $entry = Gtk2::Ex::Entry::WithCancel->new;
 
-  ok ($entry->VERSION >= $want_version, 'VERSION object method');
+  is ($entry->VERSION, $want_version, 'VERSION object method');
   ok (eval { $entry->VERSION($want_version); 1 },
       "VERSION object check $want_version");
   my $check_version = $want_version + 1000;
@@ -73,7 +77,7 @@ SKIP: {
       'activate() not a cancel');
 
   ok ($entry->signal_query ('cancel'),
-     'cancel signal exists');
+      'cancel signal exists');
 
   $entry->set('editing-cancelled', 0);
   $entry->cancel;

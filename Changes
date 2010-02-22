@@ -1,4 +1,4 @@
-Copyright 2009 Kevin Ryde
+Copyright 2009, 2010 Kevin Ryde
 
 This file is part of Gtk2-Ex-DateSpinner.
 
@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License along
 with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
+Version 6,  February 2010
+    - can use direct GtkEntry rather than EntryWithCancel subclass
 
 Version 5,  July 2009
     - in the tests avoid a slew of warnings from Gtk 2.16 when display

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -20,53 +20,35 @@
 
 use strict;
 use warnings;
-use Gtk2::Ex::DateSpinner::CellRenderer;
 use Test::More tests => 11;
+
+use FindBin;
+use File::Spec;
+use lib File::Spec->catdir($FindBin::Bin,'inc');
+use MyTestHelpers;
+use Test::Weaken::Gtk2;
 
 SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
-my $want_version = 5;
-ok ($Gtk2::Ex::DateSpinner::CellRenderer::VERSION >= $want_version,
-    'VERSION variable');
-ok (Gtk2::Ex::DateSpinner::CellRenderer->VERSION  >= $want_version,
-    'VERSION class method');
-ok (eval { Gtk2::Ex::DateSpinner::CellRenderer->VERSION($want_version); 1 },
-    "VERSION class check $want_version");
-{ my $check_version = $want_version + 1000;
+require Gtk2::Ex::DateSpinner::CellRenderer;
+
+my $want_version = 6;
+{
+  is ($Gtk2::Ex::DateSpinner::CellRenderer::VERSION, $want_version,
+      'VERSION variable');
+  is (Gtk2::Ex::DateSpinner::CellRenderer->VERSION,  $want_version,
+      'VERSION class method');
+  ok (eval { Gtk2::Ex::DateSpinner::CellRenderer->VERSION($want_version); 1 },
+      "VERSION class check $want_version");
+
+  my $check_version = $want_version + 1000;
   ok (! eval{Gtk2::Ex::DateSpinner::CellRenderer->VERSION($check_version); 1},
       "VERSION class check $check_version");
 }
 
 require Gtk2;
-diag ("Perl-Gtk2 version ",Gtk2->VERSION);
-diag ("Perl-Glib version ",Glib->VERSION);
-diag ("Compiled against Glib version ",
-      Glib::MAJOR_VERSION(), ".",
-      Glib::MINOR_VERSION(), ".",
-      Glib::MICRO_VERSION(), ".");
-diag ("Running on       Glib version ",
-      Glib::major_version(), ".",
-      Glib::minor_version(), ".",
-      Glib::micro_version(), ".");
-diag ("Compiled against Gtk version ",
-      Gtk2::MAJOR_VERSION(), ".",
-      Gtk2::MINOR_VERSION(), ".",
-      Gtk2::MICRO_VERSION(), ".");
-diag ("Running on       Gtk version ",
-      Gtk2::major_version(), ".",
-      Gtk2::minor_version(), ".",
-      Gtk2::micro_version(), ".");
-
-sub main_iterations {
-  my $count = 0;
-  while (Gtk2->events_pending) {
-    $count++;
-    Gtk2->main_iteration_do (0);
-  }
-  diag "main_iterations(): ran $count events/iterations\n";
-}
-
+MyTestHelpers::glib_gtk_versions();
 
 #-----------------------------------------------------------------------------
 # plain creation
@@ -106,7 +88,7 @@ SKIP: {
           'start_editing return');
   $toplevel->add ($editable);
   $toplevel->remove ($editable);
-  main_iterations (); # for idle handler hack
+  MyTestHelpers::main_iterations(); # for idle handler hack
 
   require Scalar::Util;
   Scalar::Util::weaken ($editable);

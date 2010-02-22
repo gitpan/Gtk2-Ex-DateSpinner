@@ -89,6 +89,10 @@ $treeview->append_column ($column);
     (editing_canceled => sub {
        print "$progname: renderer editing_canceled\n";
      });
+  $cellrenderer->signal_connect
+    (edited => sub {
+       print "$progname: renderer edited\n";
+     });
 }
 {
   my $cellrenderer = Gtk2::CellRendererText->new;

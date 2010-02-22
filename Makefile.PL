@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2007, 2008, 2009 Kevin Ryde
+# Copyright 2007, 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -24,7 +24,7 @@ use ExtUtils::MakeMaker;
 use lib 'inc';
 use MyMakeMakerExtras;
 
-WriteMakefile
+MyMakeMakerExtras::WriteMakefile
   (NAME         => 'Gtk2-Ex-DateSpinner',
    ABSTRACT     => 'Date entry widget using spin buttons.',
    VERSION_FROM => 'lib/Gtk2/Ex/DateSpinner.pm',
@@ -39,39 +39,32 @@ WriteMakefile
                     # otherwise at least 4.0 for Today() func
                     'Date::Calc' => '5.0',
 
-                    # version 1.180 for EntryWithCancel to override
-                    # superclass GInterface
-                    'Gtk2' => '1.180',
+                    # part of Glib, used explicitly so name here
+                    'Glib::Object::Subclass' => 0,
 
+                    # my ObjectBits
                     'Glib::Ex::SignalIds' => 0,
+
+                    # might work with almost any version ...
+                    'Gtk2' => 0,
+
+                    # my WidgetBits
                     'Gtk2::Ex::WidgetBits' => 0,
                    },
    clean        => { FILES => "DateSpinner.html" },
 
-   EXTRA_META => <<'HERE',
-optional_features:
-    maximum_tests:
-        description: Have "make test" do as much as possible.
-        requires:
-            Test::Weaken: 3
-            Test::Pod: 1.00
-            Test::NoWarnings: 0
-            Parse::CPAN::Meta: 0
-            Test::DistManifest: 0
-            Test::YAML::Meta: 0
-            YAML: 0
-            YAML::Syck: 0
-            YAML::Tiny: 0
-            YAML::XS: 0
-no_index:
-    directory:
-        - devel
-        - inc
-        - t
-resources:
-    homepage: http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html
-    license: http://www.gnu.org/licenses/gpl.html
-HERE
+   META_MERGE
+   => { resources
+        => { homepage => 'http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html' },
+        optional_features
+        => { maximum_tests
+             => { description => 'Have "make test" do as much as possible.',
+                  requires => { 'Test::NoWarnings' => 0,
+                                'Test::Weaken' => 3,
+                              },
+                },
+           },
+      },
   );
 
 #------------------------------------------------------------------------------
@@ -83,15 +76,9 @@ sub postamble {
 #----------------------------------------------------------------------------
 # extras from MY::postamble()
 
-DateSpinner.html: lib/Gtk2/Ex/DateSpinner.pm Makefile
-	-perl -MPod::Simple::HTML -e Pod::Simple::HTML::go \
-	  lib/Gtk2/Ex/DateSpinner.pm \
-	| sed 's!http://search.cpan.org/perldoc?Gtk2%3A%3A\([^"%]*\)"!http://gtk2-perl.sourceforge.net/doc/pod/Gtk2/\1.html"!' \
-	  >DateSpinner.html
-
 mydist:
 	make dist COMPRESS='gzip --force --best'
-	make copyright-years-check
+	make check-copyright-years
 	rm -rf mydist.tmp
 	mkdir mydist.tmp
 	(cd mydist.tmp; \
@@ -99,7 +86,7 @@ mydist:
 	 cd $(DISTVNAME); \
 	cpansign -v; \
 	perl Makefile.PL SIGN=0; \
-	make debug-constants-check; \
+	make check-debug-constants; \
 	)
 	rm -rf mydist.tmp
 

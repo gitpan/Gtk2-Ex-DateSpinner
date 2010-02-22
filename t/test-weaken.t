@@ -24,6 +24,12 @@ use Gtk2::Ex::DateSpinner::PopupForEntry;
 use Gtk2::Ex::DateSpinner::CellRenderer;
 use Test::More;
 
+use FindBin;
+use File::Spec;
+use lib File::Spec->catdir($FindBin::Bin,'inc');
+use MyTestHelpers;
+use Test::Weaken::Gtk2;
+
 use constant DEBUG => 1;
 
 # seem to need a DISPLAY initialized in gtk 2.16 or get a slew of warnings
@@ -45,52 +51,7 @@ SKIP: { eval 'use Test::NoWarnings; 1'
           or skip 'Test::NoWarnings not available', 1; }
 
 require Gtk2;
-diag ("Perl-Gtk2    version ",Gtk2->VERSION);
-diag ("Perl-Glib    version ",Glib->VERSION);
-diag ("Compiled against Glib version ",
-      Glib::MAJOR_VERSION(), ".",
-      Glib::MINOR_VERSION(), ".",
-      Glib::MICRO_VERSION(), ".");
-diag ("Running on       Glib version ",
-      Glib::major_version(), ".",
-      Glib::minor_version(), ".",
-      Glib::micro_version(), ".");
-diag ("Compiled against Gtk version ",
-      Gtk2::MAJOR_VERSION(), ".",
-      Gtk2::MINOR_VERSION(), ".",
-      Gtk2::MICRO_VERSION(), ".");
-diag ("Running on       Gtk version ",
-      Gtk2::major_version(), ".",
-      Gtk2::minor_version(), ".",
-      Gtk2::micro_version(), ".");
-
-sub main_iterations {
-  my $count = 0;
-  while (Gtk2->events_pending) {
-    $count++;
-    Gtk2->main_iteration_do (0);
-  }
-  diag "main_iterations(): ran $count events/iterations\n";
-}
-sub contents_container {
-  my ($ref) = @_;
-  require Scalar::Util;
-  (Scalar::Util::blessed ($ref) && $ref->isa('Gtk2::Container'))
-    or return;
-  if (DEBUG) { Test::More::diag ("contents ",ref $ref); }
-  return $ref->get_children;
-}
-# taking either a Gtk2::Window or an array whose first element is one
-sub destructor_destroy {
-  my ($ref) = @_;
-  if (ref $ref eq 'ARRAY') {
-    $ref = $ref->[0];
-  }
-  $ref->destroy;
-
-  # iterate to make WidgetCursor go unbusy
-  main_iterations();
-}
+MyTestHelpers::glib_gtk_versions();
 
 #------------------------------------------------------------------------------
 # DateSpinner
@@ -99,10 +60,10 @@ diag "DateSpinner";
 {
   my $leaks = Test::Weaken::leaks
     ({ constructor => sub { return Gtk2::Ex::DateSpinner->new },
-       contents => \&contents_container,
+       contents => \&Test::Weaken::Gtk2::contents_container,
      });
   is ($leaks, undef, 'DateSpinner deep garbage collection');
-  if ($leaks) {
+  if ($leaks && defined &explain) {
     diag "Test-Weaken ", explain $leaks;
   }
 }
@@ -115,11 +76,11 @@ diag "PopupForEntry";
 {
   my $leaks = Test::Weaken::leaks
     ({ constructor => sub { return Gtk2::Ex::DateSpinner::PopupForEntry->new },
-       destructor => \&destructor_destroy,
-       contents => \&contents_container,
+       destructor => \&Test::Weaken::Gtk2::destructor_destroy,
+       contents => \&Test::Weaken::Gtk2::contents_container,
      });
   is ($leaks, undef, 'PopupForEntry garbage collection');
-  if ($leaks) {
+  if ($leaks && defined &explain) {
     diag "Test-Weaken ", explain $leaks;
   }
 }
@@ -131,7 +92,7 @@ diag "PopupForEntry";
   my $leaks = Test::Weaken::leaks
     (sub { Gtk2::Ex::DateSpinner::CellRenderer->new });
   is ($leaks, undef, 'CellRenderer garbage collection');
-  if ($leaks) {
+  if ($leaks && defined &explain) {
     diag "Test-Weaken ", explain $leaks;
   }
 }
@@ -153,12 +114,13 @@ diag "PopupForEntry";
        destructor => sub {
          my ($editable) = @_;
          $toplevel->remove ($editable);
-         main_iterations (); # for idle handler hack for Gtk2 1.202
+         # iterate for idle handler hack for Gtk2 1.202
+         MyTestHelpers::main_iterations();
        },
-       contents => \&contents_container,
+       contents => \&Test::Weaken::Gtk2::contents_container,
      });
   is ($leaks, undef, 'CellRenderer garbage collection -- after start_editing');
-  if ($leaks) {
+  if ($leaks && defined &explain) {
     diag "Test-Weaken ", explain $leaks;
   }
 

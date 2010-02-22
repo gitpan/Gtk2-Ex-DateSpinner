@@ -7,17 +7,22 @@ debian/copyright
 debian/rules
 debian/watch
 devel/cell.pl
-devel/entry-alone.pl
-devel/entry-with-cancel.pl
+devel/entry-completion.pl
+devel/Entry-WithCancel.pm
+devel/Entry-WithCancel.t
+devel/entry.pl
+devel/entrywithcancel-alone.pl
+devel/entrywithcancel.pl
 devel/run.pl
 devel/screenshot.pl
+devel/spin-insert.pl
 examples/builder.pl
 examples/cellrenderer.pl
 examples/simple.pl
+inc/my_pod2html
 inc/MyMakeMakerExtras.pm
 lib/Gtk2/Ex/DateSpinner.pm
 lib/Gtk2/Ex/DateSpinner/CellRenderer.pm
-lib/Gtk2/Ex/DateSpinner/EntryWithCancel.pm
 lib/Gtk2/Ex/DateSpinner/PopupForEntry.pm
 Makefile.PL
 MANIFEST			This list of files
@@ -27,10 +32,12 @@ SIGNATURE
 t/0-META-read.t
 t/0-Test-DistManifest.t
 t/0-Test-Pod.t
+t/0-Test-Synopsis.t
 t/0-Test-YAML-Meta.t
 t/CellRenderer.t
 t/DateSpinner.t
-t/EntryWithCancel.t
+t/inc/MyTestHelpers.pm
+t/inc/Test/Weaken/Gtk2.pm
 t/PopupForEntry.t
 t/test-weaken.t
 META.yml                                 Module meta-data (added by MakeMaker)

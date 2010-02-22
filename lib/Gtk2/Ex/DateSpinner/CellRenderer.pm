@@ -1,4 +1,4 @@
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 5;
+our $VERSION = 6;
 
 use constant DEBUG => 0;
 
@@ -30,11 +30,15 @@ use Glib::Object::Subclass
 
 # gtk_cell_renderer_start_editing()
 #
-# SUPER::START_EDITING of Gtk2::CellRendererText is no good for the
-# Gtk2::Entry creation because it sets that widget to stop editing on losing
-# keyboard focus, which includes the switch away to the
-# DateSpinner::PopupEntry window, the effect being to immediately stop
-# editing when that window pops up.
+# Cannot use parent $self->SUPER::START_EDITING from Gtk2::CellRendererText
+# to do the Gtk2::Entry creation because it sets that widget to stop editing
+# on losing key focus (handler gtk_cell_renderer_text_focus_out_event()),
+# which includes the switch away to the DateSpinner::PopupEntry window, the
+# effect being to immediately stop editing when that window pops up.
+#
+# There doesn't seem to be an easy way to suppress that
+# gtk_cell_renderer_text_focus_out_event() editing-done behaviour.  Can't
+# catch focus-out and not propagate it, as the GtkEntry code needs it.
 #
 sub START_EDITING {
   my ($self, $event, $view, $pathstr, $back_rect, $cell_rect, $flags) = @_;
@@ -47,10 +51,10 @@ sub START_EDITING {
   $self->{'pathstr'} = $pathstr;
 
   # no frame and copy 'xalign' across, the same as CellRendererText does
-  require Gtk2::Ex::DateSpinner::EntryWithCancel;
-  my $entry = Gtk2::Ex::DateSpinner::EntryWithCancel->new
-    (has_frame => 0,
-     xalign => $self->get('xalign'));
+  my $entry = Gtk2::Entry->new;
+  $entry->set (has_frame => 0,
+               xalign    => $self->get('xalign'));
+  $entry->signal_connect (key_press_event => \&_do_entry_key_press);
   if (DEBUG) { print "  edit with $entry\n"; }
 
   {
@@ -89,16 +93,29 @@ sub START_EDITING {
   return $entry;
 }
 
-# 'editing-done' handler on the Gtk2::Ex::DateSpinner::EntryWithCancel
+# 'key-press-event' handler for Gtk2::Entry
+# An Escape for cancelling the edit is noted in a flag.
+# This is like gtk_cell_editable_key_press_event() notes in its (mis-spelt)
+# "editing_canceled" field.  Would prefer to look at that field, but it's
+# private.
+sub _do_entry_key_press {
+  my ($entry, $event) = @_;
+  if ($event->keyval == Gtk2::Gdk->keyval_from_name('Escape')) {
+    $entry->{'editing_cancelled'} = 1;
+  }
+  return 0; # Gtk2::EVENT_PROPAGATE
+}
+
+# 'editing-done' handler on the Gtk2::Entry
 #
 sub _do_entry_editing_done {
   my ($entry, $ref_weak_self) = @_;
   my $self = $$ref_weak_self || return;
   if (DEBUG) { print "DateSpinner::CellRenderer _do_entry_editing_done,",
-                 " cancelled ",($entry->get('editing_cancelled')?"yes":"no"),
+                 " cancelled ",($entry->{'editing_cancelled'}?"yes":"no"),
                    "\n"; }
 
-  my $cancelled = $entry->get('editing_cancelled');
+  my $cancelled = $entry->{'editing_cancelled'};
   $self->stop_editing ($cancelled);
   if (! $cancelled) {
     $self->signal_emit ('edited', $self->{'pathstr'}, $entry->get_text);
@@ -112,6 +129,8 @@ __END__
 
 Gtk2::Ex::DateSpinner::CellRenderer -- date cell renderer with DateSpinner for editing
 
+=for test_synopsis my ($treeviewcolumn)
+
 =head1 SYNOPSIS
 
  use Gtk2::Ex::DateSpinner::CellRenderer;
@@ -119,7 +138,7 @@ Gtk2::Ex::DateSpinner::CellRenderer -- date cell renderer with DateSpinner for e
 
  $treeviewcolumn->pack_start ($renderer, 0);
  $treeviewcolumn->add_attribute ($renderer, text => 0);
- $renderer->signal_connect (edited => sub { ... });
+ $renderer->signal_connect (edited => sub { some_code() });
 
 =head1 WIDGET HIERARCHY
 
@@ -156,20 +175,21 @@ can display or edit a date, this is merely one.
 
 The date to display, and edit, is taken from the renderer C<text> property
 and must be in YYYY-MM-DD format.  A new edited value is passed to the
-C<edited> signal emitted on the renderer in the usual way (see
-L<Gtk2::CellRenderer>).  Text renderer properties affect the display.
-C<xalign> is copied to the Entry widget to have it left, right or centred
-while editing the same as displayed (like CellRendererText does).
+C<edited> signal emitted from the renderer in the usual way (see
+L<Gtk2::CellRenderer>).  Text renderer properties affect the display and
+C<xalign> in the renderer is copied to the Entry widget so it's left, right
+or centred while editing the same as displayed (like C<CellRendererText>
+does).
 
 Pressing Return in the fields accepts the values.  Pressing Escape cancels
 the edit.  Likewise the Ok and Cancel button widgets.  The stock
 accelerators activate the buttons too, Alt-O and Alt-C in an English locale,
 though Return and Escape are much easier to remember.
 
-Note you must set the C<editable> property (per the base
+Note you must set the C<editable> property (per the base class
 C<Gtk2::CellRendererText>) to make the DateSpinner::CellRenderer editable,
 otherwise nothing happens when you click.  That property can be controlled
-by the usual model column or data function mechanisms to have some rows
+by the usual model column or data function mechanisms to make some rows
 editable and others not.
 
 =head1 FUNCTIONS
@@ -188,16 +208,15 @@ pairs set initial properties as per C<< Glib::Object->new >>.  Eg.
 
 =head1 OTHER NOTES
 
-As with the plain CellRendererText, DateSpinner::CellRenderer creates a new
-editable widget for every edit, including a new popup window every time.
-Both are destroyed when accepted or cancelled.  That's a little wasteful,
-but it's usually fast enough for casual editing and it might save some
-memory in between.
+C<DateSpinner::CellRenderer> creates new a new entry widget and a new popup
+window for each edit and both are destroyed on accept or cancel.  This is
+the same as the base C<CellRendererText> does.  It's a little wasteful, but
+is normally fast enough for casual editing and it might save some memory in
+between.
 
-The code for the popup and entry is in the
-C<Gtk2::Ex::DateSpinner::PopupForEntry> and
-C<Gtk2::Ex::DateSpinner::EntryWithCancel> components.  They're not loaded
-until the first edit.  They're only meant for internal use as yet.
+The code for the popup is in the C<Gtk2::Ex::DateSpinner::PopupForEntry>
+component.  It's not loaded until the first edit and is only meant for
+internal use as yet.
 
 =head1 SEE ALSO
 
@@ -214,7 +233,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html>
 
 =head1 LICENSE
 
-Gtk2-Ex-DateSpinner is Copyright 2008, 2009 Kevin Ryde
+Gtk2-Ex-DateSpinner is Copyright 2008, 2009, 2010 Kevin Ryde
 
 Gtk2-Ex-DateSpinner is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

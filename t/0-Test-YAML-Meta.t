@@ -26,10 +26,6 @@ use FindBin;
 use File::Spec;
 use Test::More;
 
-plan skip_all =>
-  "disabled -- Test::YAML::Meta 0.11 asks for 'optional_features' as a list, but think it's meant to be a map ...";
-
-
 
 my $meta_filename = File::Spec->catfile
   ($FindBin::Bin, File::Spec->updir, 'META.yml');
@@ -37,8 +33,10 @@ unless (-e $meta_filename) {
   plan skip_all => "$meta_filename doesn't exist -- assume this is a working directory not a dist";
 }
 
-eval 'use Test::YAML::Meta; 1'
-  or plan skip_all => "due to Test::YAML::Meta not available -- $@";
+# Test::YAML::Meta version 0.15 for upper case "optional_features" names
+#
+eval 'use Test::YAML::Meta 0.15; 1'
+  or plan skip_all => "due to Test::YAML::Meta 0.15 not available -- $@";
 
 Test::YAML::Meta::meta_yaml_ok();
 exit 0;

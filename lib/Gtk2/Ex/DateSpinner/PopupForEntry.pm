@@ -1,4 +1,4 @@
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -22,7 +22,7 @@ use warnings;
 use Gtk2;
 use List::Util qw(min max);
 
-our $VERSION = 5;
+our $VERSION = 6;
 
 use constant DEBUG => 0;
 
@@ -210,7 +210,9 @@ sub _do_cancel_button {
 
   $self->hide;
   my $entry = $self->{'entry'} || return;  # maybe already gone
-  $entry->cancel;
+  $entry->{'editing_cancelled'} = 1;
+  $entry->editing_done;
+  $entry->remove_widget;
 }
 
 # 'size-allocate' on the entry widget
@@ -346,7 +348,7 @@ B<Caution: This is internals of C<Gtk2::Ex::DateSpinner::CellRenderer>.  The
 idea of a popup under an edited cell might be split out under a new name at
 some time though, or even the idea of a DateSpinner popup standing alone.>
 
-C<DateSpinner::PopupForEntry> hols a C<Gtk2::Ex::DateSpinner> and Ok and
+C<DateSpinner::PopupForEntry> holds a C<Gtk2::Ex::DateSpinner> and Ok and
 Cancel buttons.  It positions itself under a given C<Gtk2::Entry> (or
 subclass of C<Gtk2::Entry>) and communicates its value back and forward with
 that Entry for dual editing.  Only a weak reference is held on the Entry and
@@ -370,7 +372,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html>
 
 =head1 LICENSE
 
-Gtk2-Ex-DateSpinner is Copyright 2008, 2009 Kevin Ryde
+Gtk2-Ex-DateSpinner is Copyright 2008, 2009, 2010 Kevin Ryde
 
 Gtk2-Ex-DateSpinner is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

@@ -21,10 +21,12 @@ use strict;
 use warnings;
 use Date::Calc;
 use Gtk2;
+use Locale::Messages 1.16;  # 1.16 for turn_utf_8_on()
 
-our $VERSION = 6;
+our $VERSION = 7;
 
-use constant DEBUG => 0;
+# uncomment this to run the ### lines
+#use Smart::Comments;
 
 use Glib::Object::Subclass
   'Gtk2::HBox',
@@ -46,6 +48,7 @@ sub INIT_INSTANCE {
                                         10,      # page_increment
                                         0);      # page_size (not applicable)
   my $year = $self->{'year'} = Gtk2::SpinButton->new ($year_adj, 1, 0);
+  $year->signal_connect (insert_text => \&_do_spin_insert_text);
   $year->show;
   $self->pack_start ($year, 0,0,0);
 
@@ -55,6 +58,7 @@ sub INIT_INSTANCE {
                                          1,      # page_increment
                                          0);     # page_size (not applicable)
   my $month = $self->{'month'} = Gtk2::SpinButton->new ($month_adj, 1, 0);
+  $month->signal_connect (insert_text => \&_do_spin_insert_text);
   $month->show;
   $self->pack_start ($month, 0,0,0);
 
@@ -64,17 +68,27 @@ sub INIT_INSTANCE {
                                        1,      # page_increment
                                        0);     # page_size (not applicable)
   my $day = $self->{'day'} = Gtk2::SpinButton->new ($day_adj, 1, 0);
+  $day->signal_connect (insert_text => \&_do_spin_insert_text);
   $day->show;
   $self->pack_start ($day, 0,0,0);
+
+  if (Gtk2::SpinButton->can('set_tooltip_text')) {
+    foreach my $elem ([$year,'Year'], [$month,'Month'], [$day,'Day']) {
+      my ($widget, $str) = @$elem;
+      $widget->set_tooltip_text
+        (Locale::Messages::turn_utf_8_on
+         (Locale::Messages::dgettext ('gtk20-properties',$str)));
+    }
+  }
 
   my $dow = $self->{'dayofweek_label'} = Gtk2::Label->new;
   $dow->show;
   $self->pack_start ($dow, 0,0,0);
 
-  $year->signal_connect  (value_changed => \&_update);
-  $month->signal_connect (value_changed => \&_update);
-  $day->signal_connect   (value_changed => \&_update);
-  _update ($year);
+  $year->signal_connect  (value_changed => \&_spin_value_changed);
+  $month->signal_connect (value_changed => \&_spin_value_changed);
+  $day->signal_connect   (value_changed => \&_spin_value_changed);
+  _spin_value_changed ($year);
 }
 
 sub SET_PROPERTY {
@@ -90,7 +104,20 @@ sub SET_PROPERTY {
   }
 }
 
-sub _update {
+sub _do_spin_insert_text {
+  my ($spin, $text, $len) = @_;
+  ### DateSpinner insert: $text
+  $text =~ s/^\s+//;
+  $text =~ s/\s+$//;
+  if ($text =~ /^\d\d\d\d-\d\d-\d\d$/) {
+    my $self = $spin->parent;
+    $self->set (value => $text);
+    $spin->signal_stop_emission_by_name ('insert-text')
+  }
+  return;
+}
+
+sub _spin_value_changed {
   my ($spin) = @_;
   my $self = $spin->parent;
 
@@ -104,7 +131,7 @@ sub _update {
   my $year  = $year_spin->get_value;
   my $month = $month_spin->get_value;
   my $day   = $day_spin->get_value;
-  if (DEBUG) { print "DateSpinner update $year, $month, $day\n"; }
+  ### DateSpinner update: "$year, $month, $day"
 
   ($year, $month, $day) = Date::Calc::Add_Delta_YMD
     (2000, 1, 1, $year-2000, $month-1, $day-1);
@@ -189,11 +216,16 @@ it wraps around to the next or previous month.  Likewise the month wraps
 around to the next or previous year.  The day of the week display updates
 once you press enter or tab when typing in a number.
 
+A paste of an ISO format YYYY-MM-DD date into any of the day, month or year
+fields sets the three to that value.  Whitespace at the start or end of a
+paste is ignored.
+
 Day of the week and date normalization calculations use C<Date::Calc> so
 they're not limited to the system C<time_t> (which may be as little as 1970
-to 2038 on a 32-bit system).  The day name uses C<POSIX::strftime> and gets
-the usual C<LC_TIME> localizations established at Perl startup or Gtk
-initialization.
+to 2038 on a 32-bit system).  The day of the week uses C<POSIX::strftime>
+and so gets the usual C<LC_TIME> localizations established at Perl startup
+or Gtk initialization.  The year/month/day tooltips use Gtk message
+translations.
 
 =head1 FUNCTIONS
 

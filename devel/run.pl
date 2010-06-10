@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -26,6 +26,19 @@ use Gtk2::Ex::DateSpinner;
 use FindBin;
 my $progname = $FindBin::Script;
 
+BEGIN {
+  $ENV{'LANG'} = 'de_DE';
+  $ENV{'LC_ALL'} = 'de_DE';
+  $ENV{'LANGUAGE'} = 'de';
+
+  $ENV{'LANG'} = 'ja_JP.utf8';
+  $ENV{'LC_ALL'} = 'ja_JP.utf8';
+  delete $ENV{'LANGUAGE'};
+
+  require POSIX;
+  print "setlocale to ",POSIX::setlocale(POSIX::LC_ALL(),""),"\n";
+}
+
 my $toplevel = Gtk2::Window->new('toplevel');
 $toplevel->signal_connect (destroy => sub {
                              print "$progname: destroy\n";
@@ -45,6 +58,7 @@ $datespinner->signal_connect ('notify::value' => sub {
 $vbox->pack_start ($datespinner, 0,0,0);
 
 my $entry = Gtk2::Entry->new;
+$entry->set_text ('1990-12-31');
 $vbox->pack_start ($entry, 1, 1, 0);
 $entry->signal_connect (activate => sub {
                           my $str = $entry->get_text;

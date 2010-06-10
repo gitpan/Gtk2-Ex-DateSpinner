@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.61.
+signed via the Module::Signature module, version 0.63.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -15,17 +15,18 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 842745cb706f8f2126506f544492f7a80dbe29b3 COPYING
-SHA1 d4a51f093379fdad1b54e9020ba7d2faed384764 Changes
-SHA1 04ff78f8ba620852836a9eb24e110e18a2a017a3 MANIFEST
-SHA1 a5702ed4c66c943b47354756b340812302d15e6f MANIFEST.SKIP
-SHA1 c02a9b01dfd48e1446e4c7b12f9386c378811f59 META.yml
-SHA1 cf2a0f95b427a64a44e013ebeaf1c99d94b3531c Makefile.PL
+SHA1 82544bd441539cbaee0de21117f08672ebc41e0f Changes
+SHA1 21f621b2c8d3b55e8f0e03cb54f4b045f319d77f MANIFEST
+SHA1 29e95fd05323b3f6056cba33fea1d076e93dbb8d MANIFEST.SKIP
+SHA1 aec0fe4e79c2d6020870dc022c506fe6936de9ce META.yml
+SHA1 14c759fe04557ec93d8e5dd4d1b730c7f9b25ce9 Makefile.PL
 SHA1 16b58d18d0386abef33f301e0d981daba8e2f713 README
-SHA1 27862391690d1ca8f41027b2c772f12e598207ab debian/changelog
+SHA1 9bce562b6a0ca441c09ec73cc4b750c1c1b5aeb2 debian/changelog
 SHA1 ac3478d69a3c81fa62e60f5c3696165a4e5e6ac4 debian/compat
-SHA1 730509a23ba9965a75ad12d3d613d5360d5c1b1a debian/control
+SHA1 d3ecf56abaedec0a2a2d82d44eec4aed370897b2 debian/control
 SHA1 b8668ce9dd62b9f5a5d13ca4f2c5590c240b8472 debian/copyright
 SHA1 de6d54e18861079bcfef3df0397188f717b7aea9 debian/rules
+SHA1 61652cd1568dcf2614df833eba241755eee34e89 debian/source/format
 SHA1 8d74b057ea03c66f4729a4a630561d5d46431835 debian/watch
 SHA1 632826457f0448fd8eac14528f75e34546c3baa2 devel/Entry-WithCancel.pm
 SHA1 229ceb8c610e69547742259d7583ac640c80c5ab devel/Entry-WithCancel.t
@@ -34,32 +35,32 @@ SHA1 769bca1540dea01524a3cdf56711489599c9643a devel/entry-completion.pl
 SHA1 55de5ed2ffbd9e4839f069b8b5f2f5594c653c0c devel/entry.pl
 SHA1 f0ab6011085b8bf37663bfa6d45a7dbb5f0360a5 devel/entrywithcancel-alone.pl
 SHA1 ac69fc44305b93410d781b245851e5d876814670 devel/entrywithcancel.pl
-SHA1 b0b56a1f2f9bef05706b3ab0dbf0fbbc466c0a88 devel/run.pl
-SHA1 aa2c643d53b749af5e717d8db69097f897044537 devel/screenshot.pl
+SHA1 6b1a7636b48b4fdf49190f915cc08cd602044847 devel/run.pl
+SHA1 368ce94b01279b6eb2d33ee2927fa82af5c3020c devel/screenshot.pl
 SHA1 85b774786ca598bc5ced0d1467a7eb8218e06417 devel/spin-insert.pl
 SHA1 8b36c6601d61e1d4a68e5f5ff987232981867585 examples/builder.pl
 SHA1 e4697f1c62b0c8c5be09daa88405bca0c4ca9e89 examples/cellrenderer.pl
 SHA1 123dab7272e244b4da382e65f93186581d0e7028 examples/simple.pl
-SHA1 04b47938da4980ca0da3d5560d7826ef3139e861 inc/MyMakeMakerExtras.pm
-SHA1 005d753dd1cb67538ded07931423b2e7cd1e25b3 inc/my_pod2html
-SHA1 705ff0edf79368facf60c3f9b715b8fe4a396b34 lib/Gtk2/Ex/DateSpinner.pm
-SHA1 b575d93a66436f5204aa5c3764601fd7bc63ce60 lib/Gtk2/Ex/DateSpinner/CellRenderer.pm
-SHA1 bd8170c701f9f4b53ce640c315a48050386152d2 lib/Gtk2/Ex/DateSpinner/PopupForEntry.pm
-SHA1 378b932305fb60823467c2af3c771fe3fc295a13 t/0-META-read.t
-SHA1 a343ed4dce96d05de51eed1ec065911584b96fce t/0-Test-DistManifest.t
-SHA1 bba0dc087cbe64d8f100ab77e6cef061c0bebf27 t/0-Test-Pod.t
-SHA1 5fa94e1e88e44064d1e6b21c88a4c9374a17bfd1 t/0-Test-Synopsis.t
-SHA1 39fb4f79da7687abc825c4ea646acb3ee9e3a342 t/0-Test-YAML-Meta.t
-SHA1 0bcfee1181178511373714aab33f2b0bfd33c117 t/CellRenderer.t
-SHA1 febeb081a4b7b930d5c314d45166876463d31543 t/DateSpinner.t
-SHA1 4ef58d0ffbb3f13abc94bf76d3b9b047a5843abc t/PopupForEntry.t
-SHA1 e5b9059d5e27d380fc9418095d773ad5f96baa06 t/inc/MyTestHelpers.pm
-SHA1 6aad0e60f2a7061d19062d5f0ec3777513bf6e59 t/inc/Test/Weaken/Gtk2.pm
-SHA1 b1877252b64720df1cba502876659ad32d3d74af t/test-weaken.t
+SHA1 5558edc5e44856cc82bb7648d031bfd6c64a346d inc/MyMakeMakerExtras.pm
+SHA1 63427b66eb26f013f10c835b0cf320c93361f310 inc/my_pod2html
+SHA1 be0749b66bb4cf6415a0041ffe9dbba2f1ce0a31 lib/Gtk2/Ex/DateSpinner.pm
+SHA1 6de31831f99988f0b21f00c379fe94ee7e9a3cf4 lib/Gtk2/Ex/DateSpinner/CellRenderer.pm
+SHA1 7673a2e30c2f19df8ba7695fe92d93ba3f5ae224 lib/Gtk2/Ex/DateSpinner/PopupForEntry.pm
+SHA1 d5d5c83c83918d8c97ca79e92ea840cdf277f01f t/0-META-read.t
+SHA1 37abd43b41068804ea4bb099fdd89af21be82926 t/0-Test-DistManifest.t
+SHA1 8f93fb4c8f0424a4442cc93c9a2e86342ef55281 t/0-Test-Pod.t
+SHA1 1de8f07883f6bf1a2ef79f2cb8adf1deb3f61cee t/0-Test-Synopsis.t
+SHA1 fb517c2fae5ddac559318bf6a224949115ea3129 t/0-Test-YAML-Meta.t
+SHA1 98274c8f043e7d92f89da6201acf960a00b04ebe t/0-exe-shebang.t
+SHA1 ed16dc79ac86fd85a0016d49bf36d56dafec3195 t/CellRenderer.t
+SHA1 3697c1e0ddb8a9e4a114384532a6439bf0db5a14 t/DateSpinner.t
+SHA1 e5b9059d5e27d380fc9418095d773ad5f96baa06 t/MyTestHelpers.pm
+SHA1 c8c087a5cf8f4390e2706eb0060ac1e2d71e5aa3 t/PopupForEntry.t
+SHA1 ebf18ae96096651a17e828cba7ca20d0ed90a200 t/test-weaken.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iD8DBQFLgxADLFMCIV9q3ToRAqkQAKCAsgwzeF+WxRqd4rFfWlahj7pu3wCgjwN7
-aK5LQC7WPtIcTeajXfq5zR0=
-=Yzrw
+iD8DBQFMD1A6LFMCIV9q3ToRApIwAKCwARI4JOJorb7pfbGHv2lZG1/HygCbBq97
+mrs5yw9L83jtxSqw6GiM5bM=
+=WHIj
 -----END PGP SIGNATURE-----

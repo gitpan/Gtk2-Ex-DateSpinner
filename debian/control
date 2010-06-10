@@ -31,7 +31,8 @@ Bugs: mailto:user42@zip.com.au
 
 Package: libgtk2-ex-datespinner-perl
 Architecture: all
-Depends: perl (>= 5.8), libglib-perl, libglib-ex-objectbits-perl, libgtk2-perl, libgtk2-ex-widgetbits-perl, libdate-calc-perl (>= 5.0), ${misc:Depends}
+Depends: perl (>= 5.8), libglib-perl, libglib-ex-objectbits-perl, libgtk2-perl, libgtk2-ex-widgetbits-perl, libdate-calc-perl (>= 5.0), libintl-perl (>= 1.16), ${perl:Depends}, ${misc:Depends}
+Suggests: libintl-xs-perl (>= 1.16)
 Description: Date entry widget for Gtk2-Perl using spin buttons
  Gtk2::Ex::DateSpinner is a simple date entry widget using spin
  buttons for year, month and day.

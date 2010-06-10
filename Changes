@@ -17,6 +17,10 @@ with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 7,  June 2010
+    - accept paste of YYYY-MM-DD string
+    - tooltips on the spinner fields
+
 Version 6,  February 2010
     - can use direct GtkEntry rather than EntryWithCancel subclass
 

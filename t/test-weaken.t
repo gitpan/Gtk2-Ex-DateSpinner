@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2008, 2009 Kevin Ryde
+# Copyright 2008, 2009, 2010 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -24,31 +24,30 @@ use Gtk2::Ex::DateSpinner::PopupForEntry;
 use Gtk2::Ex::DateSpinner::CellRenderer;
 use Test::More;
 
-use FindBin;
-use File::Spec;
-use lib File::Spec->catdir($FindBin::Bin,'inc');
-use MyTestHelpers;
-use Test::Weaken::Gtk2;
+BEGIN {
+  # seem to need a DISPLAY initialized in gtk 2.16 or get a slew of warnings
+  # creating a Gtk2::Ex::DateSpinner
+  Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
+  Gtk2->init_check
+    or plan skip_all => "due to no DISPLAY available";
 
-use constant DEBUG => 1;
+  # Test::Weaken 3 for "contents"
+  my $have_test_weaken = eval "use Test::Weaken 3;
+                               use Test::Weaken::Gtk2;
+                               1";
+  if (! $have_test_weaken) {
+    plan skip_all => "due to Test::Weaken 3 and/or Test::Weaken::Gtk2 not available -- $@";
+  }
+  diag ("Test::Weaken version ", Test::Weaken->VERSION);
 
-# seem to need a DISPLAY initialized in gtk 2.16 or get a slew of warnings
-# creating a Gtk2::Ex::DateSpinner
-Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
-Gtk2->init_check
-  or plan skip_all => "due to no DISPLAY available";
+  plan tests => 6;
 
-# Test::Weaken 3 for "contents"
-my $have_test_weaken = eval "use Test::Weaken 3; 1";
-if (! $have_test_weaken) {
-  plan skip_all => "due to Test::Weaken 3 not available -- $@";
+ SKIP: { eval 'use Test::NoWarnings; 1'
+           or skip 'Test::NoWarnings not available', 1; }
 }
-diag ("Test::Weaken version ", Test::Weaken->VERSION);
 
-plan tests => 6;
-
-SKIP: { eval 'use Test::NoWarnings; 1'
-          or skip 'Test::NoWarnings not available', 1; }
+use lib 't';
+use MyTestHelpers;
 
 require Gtk2;
 MyTestHelpers::glib_gtk_versions();

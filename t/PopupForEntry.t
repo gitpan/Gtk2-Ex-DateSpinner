@@ -22,13 +22,15 @@ use strict;
 use warnings;
 use Test::More tests => 5;
 
-SKIP: { eval 'use Test::NoWarnings; 1'
-          or skip 'Test::NoWarnings not available', 1; }
+BEGIN {
+ SKIP: { eval 'use Test::NoWarnings; 1'
+           or skip 'Test::NoWarnings not available', 1; }
+}
 
 require Gtk2::Ex::DateSpinner::PopupForEntry;
 
 {
-  my $want_version = 6;
+  my $want_version = 7;
   is ($Gtk2::Ex::DateSpinner::PopupForEntry::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::DateSpinner::PopupForEntry->VERSION,  $want_version,

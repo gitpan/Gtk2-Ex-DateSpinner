@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Gtk2-Ex-DateSpinner
-version:            6
+version:            7
 abstract:           Date entry widget using spin buttons.
 author:
     - Kevin Ryde <user42@zip.com.au>
@@ -16,6 +16,7 @@ requires:
     Glib::Object::Subclass:  0
     Gtk2:                 0
     Gtk2::Ex::WidgetBits:  0
+    Locale::Messages:     1.16
     perl:                 5.008
 resources:
     homepage:  http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html
@@ -31,6 +32,10 @@ meta-spec:
     url:      http://module-build.sourceforge.net/META-spec-v1.4.html
     version:  1.4
 optional_features:
+    maximum_devel:
+        description:  Stuff used variously for development.
+        requires:
+            Pod::Simple::HTML:  0
     maximum_tests:
         description:  Have "make test" do as much as possible.
         requires:
@@ -40,7 +45,8 @@ optional_features:
             Test::Pod:           1.00
             Test::Synopsis:      0
             Test::Weaken:        3
-            Test::YAML::Meta:    0.13
+            Test::Weaken::Gtk2:  0
+            Test::YAML::Meta:    0.15
             YAML:                0
             YAML::Syck:          0
             YAML::Tiny:          0

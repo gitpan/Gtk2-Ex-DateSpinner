@@ -21,18 +21,16 @@ use strict;
 use warnings;
 use Test::More tests => 9;
 
-use FindBin;
-use File::Spec;
-use lib File::Spec->catdir($FindBin::Bin,'inc');
+BEGIN {
+ SKIP: { eval 'use Test::NoWarnings; 1'
+           or skip 'Test::NoWarnings not available', 1; }
+}
+use lib 't';
 use MyTestHelpers;
-use Test::Weaken::Gtk2;
-
-SKIP: { eval 'use Test::NoWarnings; 1'
-          or skip 'Test::NoWarnings not available', 1; }
 
 require Gtk2::Ex::DateSpinner;
 
-my $want_version = 6;
+my $want_version = 7;
 {
   is ($Gtk2::Ex::DateSpinner::VERSION, $want_version, 'VERSION variable');
   is (Gtk2::Ex::DateSpinner->VERSION,  $want_version, 'VERSION class method');

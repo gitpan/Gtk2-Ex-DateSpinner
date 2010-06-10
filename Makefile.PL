@@ -50,6 +50,9 @@ MyMakeMakerExtras::WriteMakefile
 
                     # my WidgetBits
                     'Gtk2::Ex::WidgetBits' => 0,
+
+                    # 1.16 for turn_utf_8_on()
+                    'Locale::Messages' => '1.16',
                    },
    clean        => { FILES => "DateSpinner.html" },
 
@@ -61,6 +64,7 @@ MyMakeMakerExtras::WriteMakefile
              => { description => 'Have "make test" do as much as possible.',
                   requires => { 'Test::NoWarnings' => 0,
                                 'Test::Weaken' => 3,
+                                'Test::Weaken::Gtk2' => 0,
                               },
                 },
            },

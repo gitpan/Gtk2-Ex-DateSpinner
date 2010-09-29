@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 # Copyright 2008, 2009, 2010 Kevin Ryde
 
@@ -21,23 +21,28 @@
 use strict;
 use warnings;
 use Gtk2 '-init';
-use Gtk2::Ex::DateSpinner;
 
 use FindBin;
 my $progname = $FindBin::Script;
 
 BEGIN {
-  $ENV{'LANG'} = 'de_DE';
-  $ENV{'LC_ALL'} = 'de_DE';
-  $ENV{'LANGUAGE'} = 'de';
-
   $ENV{'LANG'} = 'ja_JP.utf8';
   $ENV{'LC_ALL'} = 'ja_JP.utf8';
   delete $ENV{'LANGUAGE'};
 
+  $ENV{'LANG'} = 'de_DE';
+  $ENV{'LC_ALL'} = 'de_DE';
+  $ENV{'LANGUAGE'} = 'de';
+
   require POSIX;
   print "setlocale to ",POSIX::setlocale(POSIX::LC_ALL(),""),"\n";
 }
+
+use Gtk2::Ex::DateSpinner;
+# {
+#   print Locale::Messages::dgettext ('gtk20-properties','Day');
+#   exit 0;
+# }
 
 my $toplevel = Gtk2::Window->new('toplevel');
 $toplevel->signal_connect (destroy => sub {

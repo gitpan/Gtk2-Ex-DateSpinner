@@ -17,6 +17,8 @@ with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+Version 8,  September 2010
+
 Version 7,  June 2010
     - accept paste of YYYY-MM-DD string
     - tooltips on the spinner fields

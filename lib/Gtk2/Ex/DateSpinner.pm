@@ -21,9 +21,11 @@ use strict;
 use warnings;
 use Date::Calc;
 use Gtk2;
-use Locale::Messages 1.16;  # 1.16 for turn_utf_8_on()
+use Glib::Ex::ObjectBits 'set_property_maybe';
+# 1.16 for turn_utf_8_on()
+use Locale::Messages 1.16 'dgettext', 'turn_utf_8_on';
 
-our $VERSION = 7;
+our $VERSION = 8;
 
 # uncomment this to run the ### lines
 #use Smart::Comments;
@@ -72,14 +74,15 @@ sub INIT_INSTANCE {
   $day->show;
   $self->pack_start ($day, 0,0,0);
 
-  if (Gtk2::SpinButton->can('set_tooltip_text')) {
-    foreach my $elem ([$year,'Year'], [$month,'Month'], [$day,'Day']) {
-      my ($widget, $str) = @$elem;
-      $widget->set_tooltip_text
-        (Locale::Messages::turn_utf_8_on
-         (Locale::Messages::dgettext ('gtk20-properties',$str)));
-    }
-  }
+  # translations from Gtk itself
+  # eg. /usr/share/locale/de/LC_MESSAGES/gtk20-properties.mo
+  # tooltip-text new in Gtk 2.10
+  set_property_maybe ($year,  tooltip_text =>
+                      turn_utf_8_on(dgettext('gtk20-properties','Year')));
+  set_property_maybe ($month, tooltip_text =>
+                      turn_utf_8_on(dgettext('gtk20-properties','Month')));
+  set_property_maybe ($day,   tooltip_text =>
+                      turn_utf_8_on(dgettext('gtk20-properties','Day')));
 
   my $dow = $self->{'dayofweek_label'} = Gtk2::Label->new;
   $dow->show;

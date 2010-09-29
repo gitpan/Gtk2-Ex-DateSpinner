@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 # Copyright 2008, 2009, 2010 Kevin Ryde
 
@@ -18,19 +18,19 @@
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
+use 5.008;
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 4;
 
-BEGIN {
- SKIP: { eval 'use Test::NoWarnings; 1'
-           or skip 'Test::NoWarnings not available', 1; }
-}
+use lib 't';
+use MyTestHelpers;
+BEGIN { MyTestHelpers::nowarnings() }
 
 require Gtk2::Ex::DateSpinner::PopupForEntry;
 
 {
-  my $want_version = 7;
+  my $want_version = 8;
   is ($Gtk2::Ex::DateSpinner::PopupForEntry::VERSION, $want_version,
       'VERSION variable');
   is (Gtk2::Ex::DateSpinner::PopupForEntry->VERSION,  $want_version,

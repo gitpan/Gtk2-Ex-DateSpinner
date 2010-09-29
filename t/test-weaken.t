@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 # Copyright 2008, 2009, 2010 Kevin Ryde
 
@@ -24,6 +24,10 @@ use Gtk2::Ex::DateSpinner::PopupForEntry;
 use Gtk2::Ex::DateSpinner::CellRenderer;
 use Test::More;
 
+use lib 't';
+use MyTestHelpers;
+BEGIN { MyTestHelpers::nowarnings() }
+
 BEGIN {
   # seem to need a DISPLAY initialized in gtk 2.16 or get a slew of warnings
   # creating a Gtk2::Ex::DateSpinner
@@ -32,22 +36,15 @@ BEGIN {
     or plan skip_all => "due to no DISPLAY available";
 
   # Test::Weaken 3 for "contents"
-  my $have_test_weaken = eval "use Test::Weaken 3;
-                               use Test::Weaken::Gtk2;
-                               1";
-  if (! $have_test_weaken) {
-    plan skip_all => "due to Test::Weaken 3 and/or Test::Weaken::Gtk2 not available -- $@";
-  }
+  eval "use Test::Weaken 3; 1"
+    or plan skip_all => "due to Test::Weaken 3 not available -- $@";
   diag ("Test::Weaken version ", Test::Weaken->VERSION);
 
-  plan tests => 6;
+  eval "use Test::Weaken::Gtk2; 1"
+    or plan skip_all => "due to Test::Weaken::Gtk2 not available -- $@";
 
- SKIP: { eval 'use Test::NoWarnings; 1'
-           or skip 'Test::NoWarnings not available', 1; }
+  plan tests => 5;
 }
-
-use lib 't';
-use MyTestHelpers;
 
 require Gtk2;
 MyTestHelpers::glib_gtk_versions();

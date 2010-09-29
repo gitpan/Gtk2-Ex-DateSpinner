@@ -43,7 +43,8 @@ MyMakeMakerExtras::WriteMakefile
                     'Glib::Object::Subclass' => 0,
 
                     # my ObjectBits
-                    'Glib::Ex::SignalIds' => 0,
+                    'Glib::Ex::ObjectBits' => 12, # new in version 12
+                    'Glib::Ex::SignalIds'  => 1,
 
                     # might work with almost any version ...
                     'Gtk2' => 0,
@@ -62,8 +63,7 @@ MyMakeMakerExtras::WriteMakefile
         optional_features
         => { maximum_tests
              => { description => 'Have "make test" do as much as possible.',
-                  requires => { 'Test::NoWarnings' => 0,
-                                'Test::Weaken' => 3,
+                  requires => { 'Test::Weaken' => 3,
                                 'Test::Weaken::Gtk2' => 0,
                               },
                 },

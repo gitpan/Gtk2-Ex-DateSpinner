@@ -17,15 +17,23 @@
 # You should have received a copy of the GNU General Public License along
 # with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
 
-
+use 5.008;
 use strict;
 use warnings;
-use Test::More tests => 21;
+use Test::More;
 
-SKIP: { eval 'use Test::NoWarnings; 1'
-          or skip 'Test::NoWarnings not available', 1; }
+use lib 't';
+use MyTestHelpers;
+BEGIN { MyTestHelpers::nowarnings() }
 
 require Gtk2::Ex::Entry::WithCancel;
+
+# seem to need a DISPLAY initialized in gtk 2.16 or get a slew of warnings
+# creating a Gtk2::Ex::Entry::WithCancel
+Gtk2->init_check
+  or plan skip_all => "due to no DISPLAY available";
+
+plan tests => 20;
 
 my $want_version = 15;
 {
@@ -41,14 +49,7 @@ my $want_version = 15;
       "VERSION class check $check_version");
 }
 
-Gtk2->disable_setlocale;  # leave LC_NUMERIC alone for version nums
-my $have_display = Gtk2->init_check;
-
-SKIP: {
-  # seem to need a DISPLAY initialized in gtk 2.16 or get a slew of warnings
-  # creating a Gtk2::Ex::Entry::WithCancel
-  $have_display or skip "due to no DISPLAY available", 1;
-
+{
   # check the once-only rc bits are ok
   ok (Gtk2::Ex::Entry::WithCancel->new,
       'create 1');
@@ -59,9 +60,7 @@ SKIP: {
   #       'INIT_INSTANCE once-only rc bits');
 }
 
-SKIP: {
-  $have_display or skip "due to no DISPLAY available", 15;
-
+{
   my $entry = Gtk2::Ex::Entry::WithCancel->new;
 
   is ($entry->VERSION, $want_version, 'VERSION object method');

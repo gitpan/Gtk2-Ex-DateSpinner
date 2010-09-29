@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 7;
+our $VERSION = 8;
 
 use constant DEBUG => 0;
 

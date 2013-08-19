@@ -1,4 +1,4 @@
-# Copyright 2008, 2009, 2010 Kevin Ryde
+# Copyright 2008, 2009, 2010, 2013 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -22,18 +22,16 @@ use warnings;
 use Gtk2;
 use List::Util qw(min max);
 
-our $VERSION = 8;
-
-use constant DEBUG => 0;
+our $VERSION = 9;
 
 use Glib::Object::Subclass
   'Gtk2::Window',
   properties => [ Glib::ParamSpec->object
                   ('entry',
-                   'entry',
-                   'Blurb.',
+                   'Entry widget',
+                   'The Gtk2::Entry widget to read/write with the popup.',
                    'Gtk2::Widget',
-                   Glib::G_PARAM_READWRITE)
+                   Glib::G_PARAM_READWRITE()),
                 ];
 
 sub INIT_INSTANCE {
@@ -72,29 +70,30 @@ sub INIT_INSTANCE {
   $datespinner->{'day'}->grab_focus;
   $hbox->show_all;
 
-  if (DEBUG) {
-    print "  year flag    ",$datespinner->{'year'}->flags,"\n";
-    print "  ok flags     ",$ok->flags,"\n";
-    print "  cancel flags ",$cancel->flags,"\n";
-    $self->signal_connect ('notify::visible' => sub {
-                             print "PopupForEntry: notify:visible changed\n";
-                           });
-    $self->signal_connect (map => sub {
-                             print "PopupForEntry: map (request)\n";
-                           });
-    $self->signal_connect (map_event => sub {
-                             print "PopupForEntry: map_event\n";
-                             return 0; # Gtk2::EVENT_PROPAGATE
-                           });
-  }
+  # {
+  #   ### year flag: $datespinner->{'year'}->flags
+  #   ### ok flags : $ok->flags
+  #   ### cancel flags: $cancel->flags
+  #   $self->signal_connect ('notify::visible' => sub {
+  #                            print "PopupForEntry: notify:visible changed\n";
+  #                          });
+  #   $self->signal_connect (map => sub {
+  #                            print "PopupForEntry: map (request)\n";
+  #                          });
+  #   $self->signal_connect (map_event => sub {
+  #                            print "PopupForEntry: map_event\n";
+  #                            return 0; # Gtk2::EVENT_PROPAGATE
+  #                          });
+  # }
 }
 
-if (DEBUG) {
-  no warnings 'once';
-  *FINALIZE_INSTANCE = sub {
-    print "PopupForEntry FINALIZE_INSTANCE\n";
-  };
-}
+# DEBUG
+# {
+#   no warnings 'once';
+#   *FINALIZE_INSTANCE = sub {
+#     print "PopupForEntry FINALIZE_INSTANCE\n";
+#   };
+# }
 
 # A 'border' decoration is probably worthwhile, but $toplevel->move doesn't
 # seem to be based on window frame position in fvwm.  Dunno who's at fault,
@@ -139,13 +138,13 @@ sub SET_PROPERTY {
 sub _do_entry_destroy {
   my ($entry, $ref_weak_self) = @_;
   my $self = $$ref_weak_self || return;
-  if (DEBUG) { print "PopupForEntry _do_entry_destroy, destroy $self too\n"; }
+  ### PopupForEntry _do_entry_destroy(), destroy self too ...
   $self->destroy;
 }
 
 sub _do_entry_changed {
   my ($entry, $ref_weak_self) = @_;
-  if (DEBUG) { print "PopupForEntry _do_entry_changed\n"; }
+  ### PopupForEntry _do_entry_changed() ...
   my $self = $$ref_weak_self || return;
   if ($self->{'change_in_progress'}) { return; }
 
@@ -159,8 +158,7 @@ sub _do_entry_changed {
 sub _do_datespinner_changed {
   my ($datespinner,  $pspec) = @_;
   my $self = $datespinner->get_toplevel;
-  if (DEBUG) { print "PopupForEntry _do_datespinner_value to ",
-                 $self->{'entry'},"\n"; }
+  ### PopupForEntry _do_datespinner_value() to: "$self->{'entry'}"
   if ($self->{'change_in_progress'}) { return; }
   my $entry = $self->{'entry'} || return;
 
@@ -171,7 +169,7 @@ sub _do_datespinner_changed {
 sub _do_entry_editing_done {
   my ($entry, $ref_weak_self) = @_;
   my $self = $$ref_weak_self || return;
-  if (DEBUG) { print "PopupForEntry: _do_entry_editing_done, hide popup\n"; }
+  ### PopupForEntry: _do_entry_editing_done(), hide popup ...
   $self->hide;
 }
 
@@ -180,7 +178,7 @@ sub _do_entry_editing_done {
 #
 sub _do_activate {
   my ($widget) = @_;
-  if (DEBUG) { print "PopupForEntry _do_activate\n"; }
+  ### PopupForEntry _do_activate() ...
   my $self = $widget->get_toplevel;
 
   $self->hide;
@@ -196,7 +194,7 @@ sub _do_activate {
 #
 sub _do_accel_cancel {
   my ($accelgroup, $widget, $keyval, $modifiers) = @_;
-  if (DEBUG) { print "PopupForEntry _do_accel_cancel\n"; }
+  ### PopupForEntry _do_accel_cancel() ...
   _do_cancel_button ($widget);
   return 1; # accel handled
 }
@@ -205,7 +203,7 @@ sub _do_accel_cancel {
 #
 sub _do_cancel_button {
   my ($button) = @_;
-  if (DEBUG) { print "PopupForEntry _do_cancel_button\n"; }
+  ### PopupForEntry _do_cancel_button() ...
   my $self = $button->get_toplevel;
 
   $self->hide;
@@ -232,19 +230,21 @@ sub _do_position {
   my ($entry) = @_;
   my $ref_weak_self = $_[-1];
   my $self = $$ref_weak_self || return;
-  if (DEBUG) {
-    my $hint = $entry->signal_get_invocation_hint;
-    print "_do_position for ",$hint->{'signal_name'},
-      "  visible=",($entry->get('visible')?"yes":"no"),
-        " mapped=",($entry->mapped?"yes":"no"),
-          "\n";
-    if (my $win = $entry->window) {
-      my ($width,$height) = $win->get_size;
-      print "  window ${width}x$height\n";
-    }
-    my $alloc = $entry->allocation;
-    print "  alloc ",$alloc->width,"x",$alloc->height,"\n";
-  }
+
+  # DEBUG
+  # {
+  #   my $hint = $entry->signal_get_invocation_hint;
+  #   print "_do_position for ",$hint->{'signal_name'},
+  #     "  visible=",($entry->get('visible')?"yes":"no"),
+  #       " mapped=",($entry->mapped?"yes":"no"),
+  #         "\n";
+  #   if (my $win = $entry->window) {
+  #     my ($width,$height) = $win->get_size;
+  #     print "  window ${width}x$height\n";
+  #   }
+  #   my $alloc = $entry->allocation;
+  #   print "  alloc ",$alloc->width,"x",$alloc->height,"\n";
+  # }
 
   my $toplevel = $entry->get_ancestor ('Gtk2::Window'); # undef if no toplevel
   $self->set_transient_for ($toplevel);
@@ -271,34 +271,30 @@ sub _do_position {
 #
 sub _window_move_underneath {
   my ($toplevel, $widget) = @_;
-  if (DEBUG) { print "_window_move_underneath\n"; }
+  ### _window_move_underneath() ...
 
   require Gtk2::Ex::WidgetBits;
   my ($x, $y) = Gtk2::Ex::WidgetBits::get_root_position ($widget);
   my $alloc = $widget->allocation;
-  my $width = $alloc->width;
   my $height = $alloc->height;
 
   my $req; # either Gtk2::Gdk::Rectangle or Gtk2::Requisition
   if (my $win = $toplevel->window) {
     $req = $win->get_frame_extents;
-    if (DEBUG) { print "  using get_frame_extents ",
-                   $req->x,",",$req->y," ",$req->width,"x",$req->height,"\n";
-                 my ($w,$h) = $win->get_size;
-                 print "  cf get_size ${w}x${h}\n";
-                 my $al = $toplevel->allocation;
-                 print "  cf allocation ",$al->width,"x",$al->height,"\n";
-               }
+
+    ### using get_frame_extents: $req->x.",".$req->y." ".$req->width."x".$req->height
+    ### cf get_size: join('x',$win->get_size)
+    ### cf allocation: $toplevel->allocation->width.'x'.$toplevel->allocation->height
+
   } else {
-    if (DEBUG) { print "  unrealized, using size_request\n"; }
+    ### unrealized, using size_request() ...
     $req = $toplevel->size_request;
   }
 
   my $rootwin = $toplevel->get_root_window;
   my ($root_width, $root_height) = $rootwin->get_size;
-  if (DEBUG) { print "  toplevel ",$req->width,"x",$req->height,"\n";
-               print "  under rect $x,$y ${width}x${height}";
-             }
+  ### toplevel: $req->width."x".$req->height
+  ### under rect: "$x,$y ${width}x${height}"
 
   my $win_x = max (0, min ($root_width - $req->width, $x, ));
 
@@ -323,6 +319,8 @@ sub _window_move_underneath {
 1;
 __END__
 
+=for stopwords popup DateSpinner Gtk2-Ex-DateSpinner Ok PopupForEntry Ryde
+
 =head1 NAME
 
 Gtk2::Ex::DateSpinner::PopupForEntry -- popup DateSpinner for a Gtk2::Entry
@@ -346,7 +344,7 @@ C<Gtk2::Ex::DateSpinner::PopupForEntry> is a subclass of C<Gtk2::Window>.
 
 B<Caution: This is internals of C<Gtk2::Ex::DateSpinner::CellRenderer>.  The
 idea of a popup under an edited cell might be split out under a new name at
-some time though, or even the idea of a DateSpinner popup standing alone.>
+some time, or even the idea of a DateSpinner popup standing alone.>
 
 C<DateSpinner::PopupForEntry> holds a C<Gtk2::Ex::DateSpinner> and Ok and
 Cancel buttons.  It positions itself under a given C<Gtk2::Entry> (or
@@ -372,7 +370,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html>
 
 =head1 LICENSE
 
-Gtk2-Ex-DateSpinner is Copyright 2008, 2009, 2010 Kevin Ryde
+Gtk2-Ex-DateSpinner is Copyright 2008, 2009, 2010, 2013 Kevin Ryde
 
 Gtk2-Ex-DateSpinner is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

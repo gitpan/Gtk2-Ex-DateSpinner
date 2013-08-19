@@ -1,6 +1,6 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
-# Copyright 2007, 2008, 2009, 2010 Kevin Ryde
+# Copyright 2007, 2008, 2009, 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -21,10 +21,8 @@ use 5.008;
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
-use lib 'inc';
-use MyMakeMakerExtras;
 
-MyMakeMakerExtras::WriteMakefile
+WriteMakefile
   (NAME         => 'Gtk2-Ex-DateSpinner',
    ABSTRACT     => 'Date entry widget using spin buttons.',
    VERSION_FROM => 'lib/Gtk2/Ex/DateSpinner.pm',
@@ -57,42 +55,46 @@ MyMakeMakerExtras::WriteMakefile
                    },
    clean        => { FILES => "DateSpinner.html" },
 
-   META_MERGE
-   => { resources
-        => { homepage => 'http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html' },
-        optional_features
-        => { maximum_tests
-             => { description => 'Have "make test" do as much as possible.',
-                  requires => { 'Test::Weaken' => 3,
-                                'Test::Weaken::Gtk2' => 0,
-                              },
-                },
-           },
-      },
+   META_MERGE =>
+   { resources =>
+     { homepage => 'http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html',
+       license  => 'http://www.gnu.org/licenses/gpl.html',
+     },
+     no_index => { directory=>['devel'] },
+
+     optional_features =>
+     { maximum_tests =>
+       { description => 'Have "make test" do as much as possible.',
+         requires => { 'Test::Weaken' => 3,
+                       'Test::Weaken::Gtk2' => 0,
+                     },
+       },
+     },
+   },
   );
 
-#------------------------------------------------------------------------------
-package MY;
-sub postamble {
-  my ($makemaker) = @_;
-  return MyMakeMakerExtras::postamble ($makemaker) . <<'HERE';
-
-#----------------------------------------------------------------------------
-# extras from MY::postamble()
-
-mydist:
-	make dist COMPRESS='gzip --force --best'
-	make check-copyright-years
-	rm -rf mydist.tmp
-	mkdir mydist.tmp
-	(cd mydist.tmp; \
-	 tar xfz ../$(DISTVNAME).tar.gz; \
-	 cd $(DISTVNAME); \
-	cpansign -v; \
-	perl Makefile.PL SIGN=0; \
-	make check-debug-constants; \
-	)
-	rm -rf mydist.tmp
-
-HERE
-}
+# #------------------------------------------------------------------------------
+# package MY;
+# sub postamble {
+#   my ($makemaker) = @_;
+#   return MyMakeMakerExtras::postamble ($makemaker) . <<'HERE';
+# 
+# #----------------------------------------------------------------------------
+# # extras from MY::postamble()
+# 
+# mydist:
+# 	make dist COMPRESS='gzip --force --best'
+# 	make check-copyright-years
+# 	rm -rf mydist.tmp
+# 	mkdir mydist.tmp
+# 	(cd mydist.tmp; \
+# 	 tar xfz ../$(DISTVNAME).tar.gz; \
+# 	 cd $(DISTVNAME); \
+# 	cpansign -v; \
+# 	perl Makefile.PL SIGN=0; \
+# 	make check-debug-constants; \
+# 	)
+# 	rm -rf mydist.tmp
+# 
+# HERE
+# }

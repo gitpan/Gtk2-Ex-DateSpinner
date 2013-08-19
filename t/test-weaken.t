@@ -59,8 +59,8 @@ diag "DateSpinner";
        contents => \&Test::Weaken::Gtk2::contents_container,
      });
   is ($leaks, undef, 'DateSpinner deep garbage collection');
-  if ($leaks && defined &explain) {
-    diag "Test-Weaken ", explain $leaks;
+  if ($leaks) {
+    eval { diag "Test-Weaken ", explain($leaks) }; # explain in Test::More 0.82
   }
 }
 
@@ -71,13 +71,13 @@ diag "PopupForEntry";
 
 {
   my $leaks = Test::Weaken::leaks
-    ({ constructor => sub { return Gtk2::Ex::DateSpinner::PopupForEntry->new },
+    ({ constructor => sub { Gtk2::Ex::DateSpinner::PopupForEntry->new },
        destructor => \&Test::Weaken::Gtk2::destructor_destroy,
        contents => \&Test::Weaken::Gtk2::contents_container,
      });
   is ($leaks, undef, 'PopupForEntry garbage collection');
-  if ($leaks && defined &explain) {
-    diag "Test-Weaken ", explain $leaks;
+  if ($leaks) {
+    eval { diag "Test-Weaken ", explain($leaks) }; # explain in Test::More 0.82
   }
 }
 
@@ -88,8 +88,8 @@ diag "PopupForEntry";
   my $leaks = Test::Weaken::leaks
     (sub { Gtk2::Ex::DateSpinner::CellRenderer->new });
   is ($leaks, undef, 'CellRenderer garbage collection');
-  if ($leaks && defined &explain) {
-    diag "Test-Weaken ", explain $leaks;
+  if ($leaks) {
+    eval { diag "Test-Weaken ", explain($leaks) }; # explain in Test::More 0.82
   }
 }
 
@@ -116,8 +116,8 @@ diag "PopupForEntry";
        contents => \&Test::Weaken::Gtk2::contents_container,
      });
   is ($leaks, undef, 'CellRenderer garbage collection -- after start_editing');
-  if ($leaks && defined &explain) {
-    diag "Test-Weaken ", explain $leaks;
+  if ($leaks) {
+    eval { diag "Test-Weaken ", explain($leaks) }; # explain in Test::More 0.82
   }
 
   $toplevel->destroy;

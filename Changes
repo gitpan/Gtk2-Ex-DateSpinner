@@ -1,4 +1,4 @@
-Copyright 2009, 2010 Kevin Ryde
+Copyright 2009, 2010, 2013 Kevin Ryde
 
 This file is part of Gtk2-Ex-DateSpinner.
 
@@ -17,7 +17,11 @@ with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-Version 8,  September 2010
+Version 9, August 2013
+    - avoid recent glib or gtk not liking $subwidget->parent in INIT_INSTANCE
+
+Version 8, September 2010
+    - test manifest only as an author test
 
 Version 7,  June 2010
     - accept paste of YYYY-MM-DD string

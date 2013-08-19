@@ -1,19 +1,19 @@
-# Copyright 2008, 2009, 2010 Kevin Ryde
+# Copyright 2008, 2009, 2010, 2011, 2013 Kevin Ryde
 
-# This file is part of Gtk2-Ex-WidgetBits.
+# This file is part of Gtk2-Ex-DateSpinner.
 #
-# Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or
+# Gtk2-Ex-DateSpinner is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as published
 # by the Free Software Foundation; either version 3, or (at your option) any
 # later version.
 #
-# Gtk2-Ex-WidgetBits is distributed in the hope that it will be useful, but
+# Gtk2-Ex-DateSpinner is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 # or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 # for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with Gtk2-Ex-WidgetBits.  If not, see <http://www.gnu.org/licenses/>.
+# with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 package Gtk2::Ex::Entry::WithCancel;
 use 5.008;
@@ -22,9 +22,7 @@ use warnings;
 # version 1.180 for perl subclass overriding GInterfaces from superclass
 use Gtk2 1.180;
 
-our $VERSION = 15;
-
-use constant DEBUG => 0;
+our $VERSION = 9;
 
 use Glib::Object::Subclass
   'Gtk2::Entry',
@@ -71,11 +69,12 @@ HERE
 #   binding:gtk "Gtk2__Ex__DateSpinner__CellRenderer_keys"
 # HERE
 
-# if (DEBUG) {
+# DEBUG
+# {
 #   *SET_PROPERTY = sub {
 #     my ($self, $pspec, $newval) = @_;
-#     if (DEBUG) { print "Entry::WithCancel: SET_PROPERTY ",$pspec->get_name,
-#                    " ",(defined $newval ? $newval : 'undef'),"\n"; }
+#     print "Entry::WithCancel: SET_PROPERTY ",$pspec->get_name,
+#                    " ",(defined $newval ? $newval : 'undef'),"\n";
 #     $self->{$pspec->get_name} = $newval;
 #   };
 # }
@@ -90,7 +89,7 @@ HERE
 #
 sub START_EDITING {
   my ($self, $event) = @_;
-  if (DEBUG) { print "Entry::WithCancel: START_EDITING\n"; }
+  ### Entry-WithCancel: START_EDITING() ...
   $self->set ('editing-cancelled', 0);
   $self->{'editing_active'} = 1;
 }
@@ -111,7 +110,7 @@ sub _do_editing_done {
 #
 sub _do_activate {
   my ($self) = @_;
-  if (DEBUG) { print "Entry::WithCancel: _do_activate\n"; }
+  ### Entry-WithCancel: _do_activate() ...
   $self->set ('editing-cancelled', 0);
   _emit_editing_done ($self, 0);
   return $self->signal_chain_from_overridden;
@@ -125,7 +124,7 @@ sub cancel {
 # 'cancel' class closure
 sub _do_cancel {
   my ($self) = @_;
-  if (DEBUG) { print "Entry::WithCancel: cancel signal\n"; }
+  ### Entry-WithCancel cancel signal ...
   $self->set ('editing-cancelled', 1);
   _emit_editing_done ($self, 1); # if active
 }
@@ -250,20 +249,20 @@ L<http://user42.tuxfamily.org/gtk2-ex-widgetbits/index.html>
 
 =head1 LICENSE
 
-Gtk2-Ex-WidgetBits is Copyright 2008, 2009, 2010 Kevin Ryde
+Gtk2-Ex-DateSpinner is Copyright 2008, 2009, 2010 Kevin Ryde
 
-Gtk2-Ex-WidgetBits is free software; you can redistribute it and/or modify
+Gtk2-Ex-DateSpinner is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the
 Free Software Foundation; either version 3, or (at your option) any later
 version.
 
-Gtk2-Ex-WidgetBits is distributed in the hope that it will be useful, but
+Gtk2-Ex-DateSpinner is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
 more details.
 
 You should have received a copy of the GNU General Public License along with
-Gtk2-Ex-WidgetBits.  If not, see L<http://www.gnu.org/licenses/>.
+Gtk2-Ex-DateSpinner.  If not, see L<http://www.gnu.org/licenses/>.
 
 =cut
 

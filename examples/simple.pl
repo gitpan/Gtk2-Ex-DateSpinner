@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2008, 2009, 2010 Kevin Ryde
+# Copyright 2008, 2009, 2010, 2013 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -18,7 +18,7 @@
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# Usage: ./simple.pl
+# Usage: perl simple.pl
 #
 # Simple datespinner display.
 

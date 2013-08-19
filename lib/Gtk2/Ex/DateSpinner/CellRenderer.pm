@@ -1,4 +1,4 @@
-# Copyright 2008, 2009, 2010 Kevin Ryde
+# Copyright 2008, 2009, 2010, 2013 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -21,9 +21,7 @@ use strict;
 use warnings;
 use Gtk2;
 
-our $VERSION = 8;
-
-use constant DEBUG => 0;
+our $VERSION = 9;
 
 use Glib::Object::Subclass
   'Gtk2::CellRendererText';
@@ -42,12 +40,11 @@ use Glib::Object::Subclass
 #
 sub START_EDITING {
   my ($self, $event, $view, $pathstr, $back_rect, $cell_rect, $flags) = @_;
-  if (DEBUG) { print "Renderer START_EDITING '$pathstr'\n";
-               print "  back ",$back_rect->x,",",$back_rect->y,
-                 " ",$back_rect->width,"x",$back_rect->width,
-                   "  cell ",$cell_rect->x,",",$cell_rect->y,
-                     " ",$cell_rect->width,"x",$cell_rect->width,"\n";
-             }
+  ### Renderer START_EDITING
+  ### $pathstr
+  ### back: $back_rect->x.",".$back_rect->y." ".$back_rect->width."x".$back_rect->width
+  ### cell: $cell_rect->x.",".$cell_rect->y." ".$cell_rect->width."x".$cell_rect->width
+
   $self->{'pathstr'} = $pathstr;
 
   # no frame and copy 'xalign' across, the same as CellRendererText does
@@ -55,7 +52,7 @@ sub START_EDITING {
   $entry->set (has_frame => 0,
                xalign    => $self->get('xalign'));
   $entry->signal_connect (key_press_event => \&_do_entry_key_press);
-  if (DEBUG) { print "  edit with $entry\n"; }
+  ### edit with: "$entry"
 
   {
     # This is a hack for Gtk2-Perl 1.210 and earlier ensuring
@@ -80,15 +77,16 @@ sub START_EDITING {
   $entry->signal_connect (editing_done => \&_do_entry_editing_done,
                           $ref_weak_self);
 
-  if (DEBUG) {
-    $entry->signal_connect (destroy => sub {
-                              print "editable: destroy\n";
-                            });
-    $entry->signal_connect (focus_out_event => sub {
-                              print "editable: focus_out_event\n";
-                              return 0; # Gtk2::EVENT_PROPAGATE
-                            });
-  }
+  # {
+  #   $entry->signal_connect (destroy => sub {
+  #                             print "editable: destroy\n";
+  #                           });
+  #   $entry->signal_connect (focus_out_event => sub {
+  #                             print "editable: focus_out_event\n";
+  #                             return 0; # Gtk2::EVENT_PROPAGATE
+  #                           });
+  # }
+
   $entry->show;
   return $entry;
 }
@@ -111,9 +109,8 @@ sub _do_entry_key_press {
 sub _do_entry_editing_done {
   my ($entry, $ref_weak_self) = @_;
   my $self = $$ref_weak_self || return;
-  if (DEBUG) { print "DateSpinner::CellRenderer _do_entry_editing_done,",
-                 " cancelled ",($entry->{'editing_cancelled'}?"yes":"no"),
-                   "\n"; }
+  ### DateSpinner-CellRenderer _do_entry_editing_done() ...
+  ### cancelled: $entry->{'editing_cancelled'}
 
   my $cancelled = $entry->{'editing_cancelled'};
   $self->stop_editing ($cancelled);
@@ -124,6 +121,8 @@ sub _do_entry_editing_done {
 
 1;
 __END__
+
+=for stopwords renderer DateSpinner Gtk2-Ex-DateSpinner YYYY-MM-DD popup decrement Ok Eg Gtk2-Perl Ryde
 
 =head1 NAME
 
@@ -153,8 +152,8 @@ C<Gtk2::CellRendererText>.
 =head1 DESCRIPTION
 
 C<DateSpinner::CellRenderer> displays an ISO format YYYY-MM-DD date as a
-text field.  Editing the field presents both a C<Gtk2::Entry> and a popup
-C<Gtk2::Ex::DateSpinner>.
+text field.  Editing the field presents both a C<Gtk2::Entry> widget and a
+popup C<Gtk2::Ex::DateSpinner>.
 
     +------------+
     | 2008-06-14 |
@@ -167,9 +166,12 @@ C<Gtk2::Ex::DateSpinner>.
 
 The popup allows mouse clicks or arrow keys to increment or decrement the
 date components.  This is good if you often just want to bump a date up or
-down a bit.  And when you're displaying YYYY-MM-DD it makes sense to present
-it like that for editing.  Of course there's a huge range of other ways you
-can display or edit a date, this is merely one.
+down.  And when you're displaying YYYY-MM-DD it makes sense to present it
+like that for editing.  Of course there's a huge range of other ways you
+could display or edit a date.
+
+See F<examples/cellrenderer.pl> for a complete program with a C<TreeView>
+and a C<DateSpinner::CellRenderer>.
 
 =head2 Details
 
@@ -183,14 +185,14 @@ does).
 
 Pressing Return in the fields accepts the values.  Pressing Escape cancels
 the edit.  Likewise the Ok and Cancel button widgets.  The stock
-accelerators activate the buttons too, Alt-O and Alt-C in an English locale,
-though Return and Escape are much easier to remember.
+accelerators activate the buttons too.  These are Alt-O and Alt-C in an
+English locale, though Return and Escape are easier to remember.
 
 Note you must set the C<editable> property (per the base class
-C<Gtk2::CellRendererText>) to make the DateSpinner::CellRenderer editable,
-otherwise nothing happens when you click.  That property can be controlled
-by the usual model column or data function mechanisms to make some rows
-editable and others not.
+C<Gtk2::CellRendererText>) to make the C<DateSpinner::CellRenderer>
+editable, otherwise nothing happens when you click.  That property can be
+controlled by the usual model column or data function mechanisms to make
+some rows editable and others not.
 
 =head1 FUNCTIONS
 
@@ -233,7 +235,7 @@ L<http://user42.tuxfamily.org/gtk2-ex-datespinner/index.html>
 
 =head1 LICENSE
 
-Gtk2-Ex-DateSpinner is Copyright 2008, 2009, 2010 Kevin Ryde
+Gtk2-Ex-DateSpinner is Copyright 2008, 2009, 2010, 2013 Kevin Ryde
 
 Gtk2-Ex-DateSpinner is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

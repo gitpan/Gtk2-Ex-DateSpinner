@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2007, 2008, 2009, 2010 Kevin Ryde
+# Copyright 2007, 2008, 2009, 2010, 2013 Kevin Ryde
 
 # This file is part of Gtk2-Ex-DateSpinner.
 #
@@ -18,7 +18,7 @@
 # with Gtk2-Ex-DateSpinner.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# Usage: ./builder.pl
+# Usage: perl builder.pl
 #
 # This is an example of making a datespinner in a GUI with Gtk2::Builder
 # (which is new in Gtk 2.12).  The class name is "Gtk2__Ex__DateSpinner", as

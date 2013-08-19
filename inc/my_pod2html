@@ -2,7 +2,7 @@
 
 # my_pod2html -- convert POD to HTML, with some mangling
 
-# Copyright 2009, 2010 Kevin Ryde
+# Copyright 2009, 2010, 2011, 2013 Kevin Ryde
 
 # my_pod2html is shared by several distributions.
 #
@@ -47,7 +47,7 @@ my %table =
    'apt-cache'    => 'http://packages.debian.org/apt',
    'apt-rdepends' => 'http://packages.debian.org/apt-rdepends',
    'gtk-options'  => 'http://manpages.ubuntu.com/manpages/jaunty/man7/gtk-options.7.html',
-   'xsetroot'     => 'http://www.x.org/archive/X11R7.5/doc/man/man1/xsetroot.1.html',
+   'xsetroot'     => 'http://www.x.org/archive/X1'.'1R7.5/doc/man/man1/xsetroot.1.html',
    'leafnode'     => 'http://leafnode.sourceforge.net',
    'lynx'         => 'http://lynx.isc.org/',
    'feed2imap'    => 'http://home.gna.org/feed2imap',
@@ -88,7 +88,7 @@ sub resolve_pod_link_by_table {
       $url = "http://user42.tuxfamily.org/glib-ex-ob"."jectbits/$1.html";
     }
     if ($to eq 'Gtk2::Ex::Widget'.'Cursor') {
-      $url = "http://user42.tuxfamily.org/glib-ex-widget'.'cursor/Widget'.'Cursor.html";
+      $url = 'http://user42.tuxfamily.org/gtk2-ex-widget'.'cursor/Widget'.'Cursor.html';
     }
     if ($to eq 'Ti'.'e:'.':TZ') {
       $url = 'http://user42.tuxfamily.org/ti'.'e-'.'tz/TZ.html';
